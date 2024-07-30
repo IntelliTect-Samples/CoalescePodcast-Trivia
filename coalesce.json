@@ -1,0 +1,16 @@
+{
+  "webProject": {
+    "projectFile": "./IntelliTect.Trivia.Web/IntelliTect.Trivia.Web.csproj"
+  },
+  "dataProject": {
+    "projectFile": "./IntelliTect.Trivia.Data/IntelliTect.Trivia.Data.csproj"
+  },
+
+  "rootGenerator": "Vue",
+
+  "generatorConfig": {
+    "Scripts": {
+      "targetDirectory": "../src"
+    }
+  }
+}
