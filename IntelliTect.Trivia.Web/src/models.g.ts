@@ -1,34 +1,57 @@
 import * as metadata from './metadata.g'
 import { Model, DataSource, convertToModel, mapToModel } from 'coalesce-vue/lib/model'
 
-export enum WidgetCategory {
-  Whizbangs = 0,
-  Sprecklesprockets = 1,
-  Discombobulators = 2,
+export interface Answer extends Model<typeof metadata.Answer> {
+  answerId: string | null
+  text: string | null
+  questionId: string | null
+  question: Question | null
+}
+export class Answer {
+  
+  /** Mutates the input object and its descendents into a valid Answer implementation. */
+  static convert(data?: Partial<Answer>): Answer {
+    return convertToModel(data || {}, metadata.Answer) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid Answer implementation. */
+  static map(data?: Partial<Answer>): Answer {
+    return mapToModel(data || {}, metadata.Answer) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.Answer; }
+  
+  /** Instantiate a new Answer, optionally basing it on the given data. */
+  constructor(data?: Partial<Answer> | {[k: string]: any}) {
+    Object.assign(this, Answer.map(data || {}));
+  }
 }
 
 
-export interface Widget extends Model<typeof metadata.Widget> {
-  widgetId: number | null
-  name: string | null
-  category: WidgetCategory | null
-  inventedOn: Date | null
+export interface Question extends Model<typeof metadata.Question> {
+  questionId: string | null
+  text: string | null
+  correctAnswerId: string | null
+  correctAnswer: Answer | null
+  answers: Answer[] | null
 }
-export class Widget {
+export class Question {
   
-  /** Mutates the input object and its descendents into a valid Widget implementation. */
-  static convert(data?: Partial<Widget>): Widget {
-    return convertToModel(data || {}, metadata.Widget) 
+  /** Mutates the input object and its descendents into a valid Question implementation. */
+  static convert(data?: Partial<Question>): Question {
+    return convertToModel(data || {}, metadata.Question) 
   }
   
-  /** Maps the input object and its descendents to a new, valid Widget implementation. */
-  static map(data?: Partial<Widget>): Widget {
-    return mapToModel(data || {}, metadata.Widget) 
+  /** Maps the input object and its descendents to a new, valid Question implementation. */
+  static map(data?: Partial<Question>): Question {
+    return mapToModel(data || {}, metadata.Question) 
   }
   
-  /** Instantiate a new Widget, optionally basing it on the given data. */
-  constructor(data?: Partial<Widget> | {[k: string]: any}) {
-    Object.assign(this, Widget.map(data || {}));
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.Question; }
+  
+  /** Instantiate a new Question, optionally basing it on the given data. */
+  constructor(data?: Partial<Question> | {[k: string]: any}) {
+    Object.assign(this, Question.map(data || {}));
   }
 }
 

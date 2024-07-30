@@ -1,5 +1,4 @@
 
-using IntelliTect.Trivia.Web.Models;
 using IntelliTect.Coalesce;
 using IntelliTect.Coalesce.Api;
 using IntelliTect.Coalesce.Api.Behaviors;
@@ -9,6 +8,7 @@ using IntelliTect.Coalesce.Mapping;
 using IntelliTect.Coalesce.Mapping.IncludeTrees;
 using IntelliTect.Coalesce.Models;
 using IntelliTect.Coalesce.TypeDefinition;
+using IntelliTect.Trivia.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,51 +21,51 @@ using System.Threading.Tasks;
 
 namespace IntelliTect.Trivia.Web.Api
 {
-    [Route("api/Widget")]
+    [Route("api/Answer")]
     [Authorize]
     [ServiceFilter(typeof(IApiActionFilter))]
-    public partial class WidgetController
-        : BaseApiController<IntelliTect.Trivia.Data.Models.Widget, WidgetDtoGen, IntelliTect.Trivia.Data.AppDbContext>
+    public partial class AnswerController
+        : BaseApiController<IntelliTect.Trivia.Data.Models.Answer, AnswerDtoGen, IntelliTect.Trivia.Data.AppDbContext>
     {
-        public WidgetController(CrudContext<IntelliTect.Trivia.Data.AppDbContext> context) : base(context)
+        public AnswerController(CrudContext<IntelliTect.Trivia.Data.AppDbContext> context) : base(context)
         {
-            GeneratedForClassViewModel = context.ReflectionRepository.GetClassViewModel<IntelliTect.Trivia.Data.Models.Widget>();
+            GeneratedForClassViewModel = context.ReflectionRepository.GetClassViewModel<IntelliTect.Trivia.Data.Models.Answer>();
         }
 
         [HttpGet("get/{id}")]
         [Authorize]
-        public virtual Task<ItemResult<WidgetDtoGen>> Get(
-            int id,
+        public virtual Task<ItemResult<AnswerDtoGen>> Get(
+            string id,
             DataSourceParameters parameters,
-            IDataSource<IntelliTect.Trivia.Data.Models.Widget> dataSource)
+            IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)
             => GetImplementation(id, parameters, dataSource);
 
         [HttpGet("list")]
         [Authorize]
-        public virtual Task<ListResult<WidgetDtoGen>> List(
+        public virtual Task<ListResult<AnswerDtoGen>> List(
             ListParameters parameters,
-            IDataSource<IntelliTect.Trivia.Data.Models.Widget> dataSource)
+            IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)
             => ListImplementation(parameters, dataSource);
 
         [HttpGet("count")]
         [Authorize]
         public virtual Task<ItemResult<int>> Count(
             FilterParameters parameters,
-            IDataSource<IntelliTect.Trivia.Data.Models.Widget> dataSource)
+            IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)
             => CountImplementation(parameters, dataSource);
 
         [HttpPost("save")]
         [Authorize]
-        public virtual Task<ItemResult<WidgetDtoGen>> Save(
-            [FromForm] WidgetDtoGen dto,
+        public virtual Task<ItemResult<AnswerDtoGen>> Save(
+            [FromForm] AnswerDtoGen dto,
             [FromQuery] DataSourceParameters parameters,
-            IDataSource<IntelliTect.Trivia.Data.Models.Widget> dataSource,
-            IBehaviors<IntelliTect.Trivia.Data.Models.Widget> behaviors)
+            IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource,
+            IBehaviors<IntelliTect.Trivia.Data.Models.Answer> behaviors)
             => SaveImplementation(dto, parameters, dataSource, behaviors);
 
         [HttpPost("bulkSave")]
         [Authorize]
-        public virtual Task<ItemResult<WidgetDtoGen>> BulkSave(
+        public virtual Task<ItemResult<AnswerDtoGen>> BulkSave(
             [FromBody] BulkSaveRequest dto,
             [FromQuery] DataSourceParameters parameters,
             [FromServices] IDataSourceFactory dataSourceFactory,
@@ -74,10 +74,10 @@ namespace IntelliTect.Trivia.Web.Api
 
         [HttpPost("delete/{id}")]
         [Authorize]
-        public virtual Task<ItemResult<WidgetDtoGen>> Delete(
-            int id,
-            IBehaviors<IntelliTect.Trivia.Data.Models.Widget> behaviors,
-            IDataSource<IntelliTect.Trivia.Data.Models.Widget> dataSource)
+        public virtual Task<ItemResult<AnswerDtoGen>> Delete(
+            string id,
+            IBehaviors<IntelliTect.Trivia.Data.Models.Answer> behaviors,
+            IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)
             => DeleteImplementation(id, new DataSourceParameters(), dataSource, behaviors);
     }
 }

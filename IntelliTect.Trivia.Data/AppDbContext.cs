@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore;
 using IntelliTect.Trivia.Data.Models;
 
 namespace IntelliTect.Trivia.Data;
@@ -6,7 +5,8 @@ namespace IntelliTect.Trivia.Data;
 [Coalesce]
 public class AppDbContext : DbContext
 {
-    public DbSet<Widget> Widgets => Set<Widget>();
+    public DbSet<Question> Questions => Set<Question>();
+    public DbSet<Answer> Answers => Set<Answer>();
 
     public AppDbContext() { }
 

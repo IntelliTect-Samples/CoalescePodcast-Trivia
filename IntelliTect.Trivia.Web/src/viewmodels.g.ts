@@ -3,33 +3,63 @@ import * as $models from './models.g'
 import * as $apiClients from './api-clients.g'
 import { ViewModel, ListViewModel, ServiceViewModel, DeepPartial, defineProps } from 'coalesce-vue/lib/viewmodel'
 
-export interface WidgetViewModel extends $models.Widget {
-  widgetId: number | null;
-  name: string | null;
-  category: $models.WidgetCategory | null;
-  inventedOn: Date | null;
+export interface AnswerViewModel extends $models.Answer {
+  answerId: string | null;
+  text: string | null;
+  questionId: string | null;
+  question: QuestionViewModel | null;
 }
-export class WidgetViewModel extends ViewModel<$models.Widget, $apiClients.WidgetApiClient, number> implements $models.Widget  {
+export class AnswerViewModel extends ViewModel<$models.Answer, $apiClients.AnswerApiClient, string> implements $models.Answer  {
   
-  constructor(initialData?: DeepPartial<$models.Widget> | null) {
-    super($metadata.Widget, new $apiClients.WidgetApiClient(), initialData)
+  constructor(initialData?: DeepPartial<$models.Answer> | null) {
+    super($metadata.Answer, new $apiClients.AnswerApiClient(), initialData)
   }
 }
-defineProps(WidgetViewModel, $metadata.Widget)
+defineProps(AnswerViewModel, $metadata.Answer)
 
-export class WidgetListViewModel extends ListViewModel<$models.Widget, $apiClients.WidgetApiClient, WidgetViewModel> {
+export class AnswerListViewModel extends ListViewModel<$models.Answer, $apiClients.AnswerApiClient, AnswerViewModel> {
   
   constructor() {
-    super($metadata.Widget, new $apiClients.WidgetApiClient())
+    super($metadata.Answer, new $apiClients.AnswerApiClient())
+  }
+}
+
+
+export interface QuestionViewModel extends $models.Question {
+  questionId: string | null;
+  text: string | null;
+  correctAnswerId: string | null;
+  correctAnswer: AnswerViewModel | null;
+  answers: AnswerViewModel[] | null;
+}
+export class QuestionViewModel extends ViewModel<$models.Question, $apiClients.QuestionApiClient, string> implements $models.Question  {
+  
+  
+  public addToAnswers(initialData?: DeepPartial<$models.Answer> | null) {
+    return this.$addChild('answers', initialData) as AnswerViewModel
+  }
+  
+  constructor(initialData?: DeepPartial<$models.Question> | null) {
+    super($metadata.Question, new $apiClients.QuestionApiClient(), initialData)
+  }
+}
+defineProps(QuestionViewModel, $metadata.Question)
+
+export class QuestionListViewModel extends ListViewModel<$models.Question, $apiClients.QuestionApiClient, QuestionViewModel> {
+  
+  constructor() {
+    super($metadata.Question, new $apiClients.QuestionApiClient())
   }
 }
 
 
 const viewModelTypeLookup = ViewModel.typeLookup = {
-  Widget: WidgetViewModel,
+  Answer: AnswerViewModel,
+  Question: QuestionViewModel,
 }
 const listViewModelTypeLookup = ListViewModel.typeLookup = {
-  Widget: WidgetListViewModel,
+  Answer: AnswerListViewModel,
+  Question: QuestionListViewModel,
 }
 const serviceViewModelTypeLookup = ServiceViewModel.typeLookup = {
 }
