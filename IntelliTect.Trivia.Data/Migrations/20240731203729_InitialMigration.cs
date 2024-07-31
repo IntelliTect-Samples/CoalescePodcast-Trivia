@@ -29,15 +29,14 @@ namespace IntelliTect.Trivia.Data.Migrations
                 {
                     QuestionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CorrectAnswerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CorrectAnswerAnswerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CorrectAnswerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Questions", x => x.QuestionId);
                     table.ForeignKey(
-                        name: "FK_Questions_Answers_CorrectAnswerAnswerId",
-                        column: x => x.CorrectAnswerAnswerId,
+                        name: "FK_Questions_Answers_CorrectAnswerId",
+                        column: x => x.CorrectAnswerId,
                         principalTable: "Answers",
                         principalColumn: "AnswerId",
                         onDelete: ReferentialAction.Restrict);
@@ -49,9 +48,9 @@ namespace IntelliTect.Trivia.Data.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_CorrectAnswerAnswerId",
+                name: "IX_Questions_CorrectAnswerId",
                 table: "Questions",
-                column: "CorrectAnswerAnswerId");
+                column: "CorrectAnswerId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Answers_Questions_QuestionId",

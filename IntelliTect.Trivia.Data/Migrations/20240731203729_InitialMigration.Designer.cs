@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelliTect.Trivia.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240730190753_InitialMigration")]
+    [Migration("20240731203729_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -51,11 +51,8 @@ namespace IntelliTect.Trivia.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CorrectAnswerAnswerId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("CorrectAnswerId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -63,7 +60,7 @@ namespace IntelliTect.Trivia.Data.Migrations
 
                     b.HasKey("QuestionId");
 
-                    b.HasIndex("CorrectAnswerAnswerId");
+                    b.HasIndex("CorrectAnswerId");
 
                     b.ToTable("Questions");
                 });
@@ -83,7 +80,7 @@ namespace IntelliTect.Trivia.Data.Migrations
                 {
                     b.HasOne("IntelliTect.Trivia.Data.Models.Answer", "CorrectAnswer")
                         .WithMany()
-                        .HasForeignKey("CorrectAnswerAnswerId")
+                        .HasForeignKey("CorrectAnswerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("CorrectAnswer");

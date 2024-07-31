@@ -8,6 +8,7 @@ public class Question
     [ListText]
     public required string Text { get; set; }
 
+    [ForeignKey(nameof(CorrectAnswer))]
     public string? CorrectAnswerId { get; set; }
     public Answer? CorrectAnswer { get; set; }
 

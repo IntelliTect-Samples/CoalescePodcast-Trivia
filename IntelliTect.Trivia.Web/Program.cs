@@ -130,6 +130,7 @@ using (var scope = app.Services.CreateScope())
     // Run database migrations.
     using var db = serviceScope.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
+    await Seeder.Seed(db);
 }
 
 app.Run();
