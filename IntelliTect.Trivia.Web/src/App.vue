@@ -4,7 +4,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>
         <router-link to="/" style="color: inherit">
-          Coalesce Vue Template
+          Coalesce Podcast - Trivia!
         </router-link>
       </v-toolbar-title>
     </v-app-bar>
@@ -12,9 +12,9 @@
       <v-list>
         <v-list-item to="/" prepend-icon="fas fa-home" title="Home" />
         <v-list-item
-          to="/widget"
-          prepend-icon="fas fa-palette"
-          title="Custom Page Example"
+          to="/questions"
+          prepend-icon="fas fa-question-circle"
+          title="Questions"
         />
         <v-list-item
           to="/admin"
