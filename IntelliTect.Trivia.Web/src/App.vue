@@ -12,9 +12,9 @@
       <v-list>
         <v-list-item to="/" prepend-icon="fas fa-home" title="Home" />
         <v-list-item
-          to="/widget"
+          to="/questions"
           prepend-icon="fas fa-palette"
-          title="Custom Page Example"
+          title="Questions"
         />
         <v-list-item
           to="/admin"
