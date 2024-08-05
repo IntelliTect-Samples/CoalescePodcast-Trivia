@@ -3,9 +3,9 @@
     <h1>Questions</h1>
 
     <QuestionCard
+      :question="question"
       v-for="question in questions.$items"
       :key="question.$stableId"
-      :question="question"
     />
   </v-container>
 </template>

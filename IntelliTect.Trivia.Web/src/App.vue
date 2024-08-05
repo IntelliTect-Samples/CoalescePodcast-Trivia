@@ -13,7 +13,7 @@
         <v-list-item to="/" prepend-icon="fas fa-home" title="Home" />
         <v-list-item
           to="/questions"
-          prepend-icon="fas fa-question-circle"
+          prepend-icon="fas fa-palette"
           title="Questions"
         />
         <v-list-item
