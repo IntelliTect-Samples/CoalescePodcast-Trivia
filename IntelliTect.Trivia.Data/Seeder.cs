@@ -7,16 +7,27 @@ public static class Seeder
     {
         if (!db.Questions.Any())
         {
-            Question question = new() { Text = "What is the capital of France?" };
-            db.Questions.Add(question);
+            Question questionFrance = new() { Text = "What is the capital of France?" };
+            db.Questions.Add(questionFrance);
             await db.SaveChangesAsync();
 
-            Answer correctAnswer = new() { Text = "Paris", Question = question };
-            question.CorrectAnswer = correctAnswer;
+            Answer correctAnswerFrance = new() { Text = "Paris", Question = questionFrance };
+            questionFrance.CorrectAnswer = correctAnswerFrance;
 
-            question.Answers.Add(new Answer() { Text = "Normandy" });
-            question.Answers.Add(new Answer() { Text = "Nice" });
-            question.Answers.Add(new Answer() { Text = "London" });
+            questionFrance.Answers.Add(new Answer() { Text = "Normandy" });
+            questionFrance.Answers.Add(new Answer() { Text = "Nice" });
+            questionFrance.Answers.Add(new Answer() { Text = "London" });
+
+            Question questionCanada = new() { Text = "What is the capital of Canada?" };
+            db.Questions.Add(questionCanada);
+            await db.SaveChangesAsync();
+
+            Answer correctAnswerCanada = new() { Text = "Ottawa", Question = questionCanada };
+            questionCanada.CorrectAnswer = correctAnswerCanada;
+
+            questionCanada.Answers.Add(new Answer() { Text = "Toronto" });
+            questionCanada.Answers.Add(new Answer() { Text = "Vancouver" });
+            questionCanada.Answers.Add(new Answer() { Text = "Montreal" });
 
             await db.SaveChangesAsync();
         }
