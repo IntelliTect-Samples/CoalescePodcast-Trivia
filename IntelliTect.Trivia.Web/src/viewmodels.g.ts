@@ -1,13 +1,14 @@
 import * as $metadata from './metadata.g'
 import * as $models from './models.g'
 import * as $apiClients from './api-clients.g'
-import { ViewModel, ListViewModel, ServiceViewModel, DeepPartial, defineProps } from 'coalesce-vue/lib/viewmodel'
+import { ViewModel, ListViewModel, ViewModelCollection, ServiceViewModel, DeepPartial, defineProps } from 'coalesce-vue/lib/viewmodel'
 
 export interface AnswerViewModel extends $models.Answer {
   answerId: string | null;
   text: string | null;
   questionId: string | null;
-  question: QuestionViewModel | null;
+  get question(): QuestionViewModel | null;
+  set question(value: QuestionViewModel | $models.Question | null);
 }
 export class AnswerViewModel extends ViewModel<$models.Answer, $apiClients.AnswerApiClient, string> implements $models.Answer  {
   
@@ -29,8 +30,10 @@ export interface QuestionViewModel extends $models.Question {
   questionId: string | null;
   text: string | null;
   correctAnswerId: string | null;
-  correctAnswer: AnswerViewModel | null;
-  answers: AnswerViewModel[] | null;
+  get correctAnswer(): AnswerViewModel | null;
+  set correctAnswer(value: AnswerViewModel | $models.Answer | null);
+  get answers(): ViewModelCollection<AnswerViewModel, $models.Answer>;
+  set answers(value: (AnswerViewModel | $models.Answer)[] | null);
 }
 export class QuestionViewModel extends ViewModel<$models.Question, $apiClients.QuestionApiClient, string> implements $models.Question  {
   

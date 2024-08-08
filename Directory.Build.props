@@ -8,6 +8,6 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>4.9</TypeScriptToolsVersion>
 
-    <CoalesceVersion>4.0.0-alpha.20240502.1</CoalesceVersion>
+    <CoalesceVersion>5.0.0-ci.20240806.2</CoalesceVersion>
   </PropertyGroup>
 </Project>

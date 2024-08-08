@@ -25,7 +25,7 @@ namespace IntelliTect.Trivia.Web.Api
     [Authorize]
     [ServiceFilter(typeof(IApiActionFilter))]
     public partial class AnswerController
-        : BaseApiController<IntelliTect.Trivia.Data.Models.Answer, AnswerDtoGen, IntelliTect.Trivia.Data.AppDbContext>
+        : BaseApiController<IntelliTect.Trivia.Data.Models.Answer, AnswerParameter, AnswerResponse, IntelliTect.Trivia.Data.AppDbContext>
     {
         public AnswerController(CrudContext<IntelliTect.Trivia.Data.AppDbContext> context) : base(context)
         {
@@ -34,7 +34,7 @@ namespace IntelliTect.Trivia.Web.Api
 
         [HttpGet("get/{id}")]
         [Authorize]
-        public virtual Task<ItemResult<AnswerDtoGen>> Get(
+        public virtual Task<ItemResult<AnswerResponse>> Get(
             string id,
             DataSourceParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)
@@ -42,7 +42,7 @@ namespace IntelliTect.Trivia.Web.Api
 
         [HttpGet("list")]
         [Authorize]
-        public virtual Task<ListResult<AnswerDtoGen>> List(
+        public virtual Task<ListResult<AnswerResponse>> List(
             ListParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)
             => ListImplementation(parameters, dataSource);
@@ -56,8 +56,8 @@ namespace IntelliTect.Trivia.Web.Api
 
         [HttpPost("save")]
         [Authorize]
-        public virtual Task<ItemResult<AnswerDtoGen>> Save(
-            [FromForm] AnswerDtoGen dto,
+        public virtual Task<ItemResult<AnswerResponse>> Save(
+            [FromForm] AnswerParameter dto,
             [FromQuery] DataSourceParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource,
             IBehaviors<IntelliTect.Trivia.Data.Models.Answer> behaviors)
@@ -65,16 +65,17 @@ namespace IntelliTect.Trivia.Web.Api
 
         [HttpPost("bulkSave")]
         [Authorize]
-        public virtual Task<ItemResult<AnswerDtoGen>> BulkSave(
+        public virtual Task<ItemResult<AnswerResponse>> BulkSave(
             [FromBody] BulkSaveRequest dto,
             [FromQuery] DataSourceParameters parameters,
+            IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource,
             [FromServices] IDataSourceFactory dataSourceFactory,
             [FromServices] IBehaviorsFactory behaviorsFactory)
-            => BulkSaveImplementation(dto, parameters, dataSourceFactory, behaviorsFactory);
+            => BulkSaveImplementation(dto, parameters, dataSource, dataSourceFactory, behaviorsFactory);
 
         [HttpPost("delete/{id}")]
         [Authorize]
-        public virtual Task<ItemResult<AnswerDtoGen>> Delete(
+        public virtual Task<ItemResult<AnswerResponse>> Delete(
             string id,
             IBehaviors<IntelliTect.Trivia.Data.Models.Answer> behaviors,
             IDataSource<IntelliTect.Trivia.Data.Models.Answer> dataSource)

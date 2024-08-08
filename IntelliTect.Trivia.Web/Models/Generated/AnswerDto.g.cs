@@ -8,14 +8,13 @@ using System.Security.Claims;
 
 namespace IntelliTect.Trivia.Web.Models
 {
-    public partial class AnswerDtoGen : GeneratedDto<IntelliTect.Trivia.Data.Models.Answer>
+    public partial class AnswerParameter : GeneratedParameterDto<IntelliTect.Trivia.Data.Models.Answer>
     {
-        public AnswerDtoGen() { }
+        public AnswerParameter() { }
 
         private string _AnswerId;
         private string _Text;
         private string _QuestionId;
-        private IntelliTect.Trivia.Web.Models.QuestionDtoGen _Question;
 
         public string AnswerId
         {
@@ -31,27 +30,6 @@ namespace IntelliTect.Trivia.Web.Models
         {
             get => _QuestionId;
             set { _QuestionId = value; Changed(nameof(QuestionId)); }
-        }
-        public IntelliTect.Trivia.Web.Models.QuestionDtoGen Question
-        {
-            get => _Question;
-            set { _Question = value; Changed(nameof(Question)); }
-        }
-
-        /// <summary>
-        /// Map from the domain object to the properties of the current DTO instance.
-        /// </summary>
-        public override void MapFrom(IntelliTect.Trivia.Data.Models.Answer obj, IMappingContext context, IncludeTree tree = null)
-        {
-            if (obj == null) return;
-            var includes = context.Includes;
-
-            this.AnswerId = obj.AnswerId;
-            this.Text = obj.Text;
-            this.QuestionId = obj.QuestionId;
-            if (tree == null || tree[nameof(this.Question)] != null)
-                this.Question = obj.Question.MapToDto<IntelliTect.Trivia.Data.Models.Question, QuestionDtoGen>(context, tree?[nameof(this.Question)]);
-
         }
 
         /// <summary>
@@ -84,6 +62,32 @@ namespace IntelliTect.Trivia.Web.Models
             if (ShouldMapTo(nameof(QuestionId))) entity.QuestionId = QuestionId;
 
             return entity;
+        }
+    }
+
+    public partial class AnswerResponse : GeneratedResponseDto<IntelliTect.Trivia.Data.Models.Answer>
+    {
+        public AnswerResponse() { }
+
+        public string AnswerId { get; set; }
+        public string Text { get; set; }
+        public string QuestionId { get; set; }
+        public IntelliTect.Trivia.Web.Models.QuestionResponse Question { get; set; }
+
+        /// <summary>
+        /// Map from the domain object to the properties of the current DTO instance.
+        /// </summary>
+        public override void MapFrom(IntelliTect.Trivia.Data.Models.Answer obj, IMappingContext context, IncludeTree tree = null)
+        {
+            if (obj == null) return;
+            var includes = context.Includes;
+
+            this.AnswerId = obj.AnswerId;
+            this.Text = obj.Text;
+            this.QuestionId = obj.QuestionId;
+            if (tree == null || tree[nameof(this.Question)] != null)
+                this.Question = obj.Question.MapToDto<IntelliTect.Trivia.Data.Models.Question, QuestionResponse>(context, tree?[nameof(this.Question)]);
+
         }
     }
 }

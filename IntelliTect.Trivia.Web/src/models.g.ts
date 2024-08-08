@@ -1,5 +1,5 @@
 import * as metadata from './metadata.g'
-import { Model, DataSource, convertToModel, mapToModel } from 'coalesce-vue/lib/model'
+import { Model, DataSource, convertToModel, mapToModel, reactiveDataSource } from 'coalesce-vue/lib/model'
 
 export interface Answer extends Model<typeof metadata.Answer> {
   answerId: string | null

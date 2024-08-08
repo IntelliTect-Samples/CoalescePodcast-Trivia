@@ -8,15 +8,13 @@ using System.Security.Claims;
 
 namespace IntelliTect.Trivia.Web.Models
 {
-    public partial class QuestionDtoGen : GeneratedDto<IntelliTect.Trivia.Data.Models.Question>
+    public partial class QuestionParameter : GeneratedParameterDto<IntelliTect.Trivia.Data.Models.Question>
     {
-        public QuestionDtoGen() { }
+        public QuestionParameter() { }
 
         private string _QuestionId;
         private string _Text;
         private string _CorrectAnswerId;
-        private IntelliTect.Trivia.Web.Models.AnswerDtoGen _CorrectAnswer;
-        private System.Collections.Generic.ICollection<IntelliTect.Trivia.Web.Models.AnswerDtoGen> _Answers;
 
         public string QuestionId
         {
@@ -32,44 +30,6 @@ namespace IntelliTect.Trivia.Web.Models
         {
             get => _CorrectAnswerId;
             set { _CorrectAnswerId = value; Changed(nameof(CorrectAnswerId)); }
-        }
-        public IntelliTect.Trivia.Web.Models.AnswerDtoGen CorrectAnswer
-        {
-            get => _CorrectAnswer;
-            set { _CorrectAnswer = value; Changed(nameof(CorrectAnswer)); }
-        }
-        public System.Collections.Generic.ICollection<IntelliTect.Trivia.Web.Models.AnswerDtoGen> Answers
-        {
-            get => _Answers;
-            set { _Answers = value; Changed(nameof(Answers)); }
-        }
-
-        /// <summary>
-        /// Map from the domain object to the properties of the current DTO instance.
-        /// </summary>
-        public override void MapFrom(IntelliTect.Trivia.Data.Models.Question obj, IMappingContext context, IncludeTree tree = null)
-        {
-            if (obj == null) return;
-            var includes = context.Includes;
-
-            this.QuestionId = obj.QuestionId;
-            this.Text = obj.Text;
-            this.CorrectAnswerId = obj.CorrectAnswerId;
-            if (tree == null || tree[nameof(this.CorrectAnswer)] != null)
-                this.CorrectAnswer = obj.CorrectAnswer.MapToDto<IntelliTect.Trivia.Data.Models.Answer, AnswerDtoGen>(context, tree?[nameof(this.CorrectAnswer)]);
-
-            var propValAnswers = obj.Answers;
-            if (propValAnswers != null && (tree == null || tree[nameof(this.Answers)] != null))
-            {
-                this.Answers = propValAnswers
-                    .OrderBy(f => f.AnswerId)
-                    .Select(f => f.MapToDto<IntelliTect.Trivia.Data.Models.Answer, AnswerDtoGen>(context, tree?[nameof(this.Answers)])).ToList();
-            }
-            else if (propValAnswers == null && tree?[nameof(this.Answers)] != null)
-            {
-                this.Answers = new AnswerDtoGen[0];
-            }
-
         }
 
         /// <summary>
@@ -102,6 +62,45 @@ namespace IntelliTect.Trivia.Web.Models
             if (ShouldMapTo(nameof(CorrectAnswerId))) entity.CorrectAnswerId = CorrectAnswerId;
 
             return entity;
+        }
+    }
+
+    public partial class QuestionResponse : GeneratedResponseDto<IntelliTect.Trivia.Data.Models.Question>
+    {
+        public QuestionResponse() { }
+
+        public string QuestionId { get; set; }
+        public string Text { get; set; }
+        public string CorrectAnswerId { get; set; }
+        public IntelliTect.Trivia.Web.Models.AnswerResponse CorrectAnswer { get; set; }
+        public System.Collections.Generic.ICollection<IntelliTect.Trivia.Web.Models.AnswerResponse> Answers { get; set; }
+
+        /// <summary>
+        /// Map from the domain object to the properties of the current DTO instance.
+        /// </summary>
+        public override void MapFrom(IntelliTect.Trivia.Data.Models.Question obj, IMappingContext context, IncludeTree tree = null)
+        {
+            if (obj == null) return;
+            var includes = context.Includes;
+
+            this.QuestionId = obj.QuestionId;
+            this.Text = obj.Text;
+            this.CorrectAnswerId = obj.CorrectAnswerId;
+            if (tree == null || tree[nameof(this.CorrectAnswer)] != null)
+                this.CorrectAnswer = obj.CorrectAnswer.MapToDto<IntelliTect.Trivia.Data.Models.Answer, AnswerResponse>(context, tree?[nameof(this.CorrectAnswer)]);
+
+            var propValAnswers = obj.Answers;
+            if (propValAnswers != null && (tree == null || tree[nameof(this.Answers)] != null))
+            {
+                this.Answers = propValAnswers
+                    .OrderBy(f => f.AnswerId)
+                    .Select(f => f.MapToDto<IntelliTect.Trivia.Data.Models.Answer, AnswerResponse>(context, tree?[nameof(this.Answers)])).ToList();
+            }
+            else if (propValAnswers == null && tree?[nameof(this.Answers)] != null)
+            {
+                this.Answers = new AnswerResponse[0];
+            }
+
         }
     }
 }
