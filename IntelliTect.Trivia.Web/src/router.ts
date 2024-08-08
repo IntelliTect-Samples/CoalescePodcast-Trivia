@@ -15,6 +15,12 @@ export default createRouter({
       component: () => import("./views/Questions.vue"),
     },
     {
+      path: "/question/:id",
+      name: "question",
+      component: () => import("./views/QuestionEditor.vue"),
+      props: (route) => ({ id: route.params.id }),
+    },
+    {
       path: "/admin",
       name: "admin",
       component: () => import("./views/Admin.vue"),

@@ -4,6 +4,7 @@
 
     <QuestionCard
       :question="question"
+      class="mb-2"
       v-for="question in questions.$items"
       :key="question.$stableId"
     />
