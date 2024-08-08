@@ -8,6 +8,7 @@ public class Answer
 
     [Required]
     [ListText]
+    [Search(SearchMethod = SearchAttribute.SearchMethods.Contains)]
     public required string Text { get; set; }
 
     [Required]

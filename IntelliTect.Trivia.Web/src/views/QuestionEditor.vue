@@ -10,7 +10,7 @@
       <c-input :model="answer" for="text" />
     </div>
 
-    <v-btn @click="question.$bulkSave()"> Save </v-btn>
+    <v-btn @click="save"> Save </v-btn>
   </v-container>
 </template>
 
@@ -23,4 +23,10 @@ const props = defineProps<{
 
 const question = new QuestionViewModel();
 question.$load(props.id);
+
+question.$useAutoSave({ deep: true });
+
+function save() {
+  question.$bulkSave();
+}
 </script>

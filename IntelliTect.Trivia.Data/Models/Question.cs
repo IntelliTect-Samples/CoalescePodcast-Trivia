@@ -6,12 +6,14 @@ public class Question
 
     [Required]
     [ListText]
+    [Search(SearchMethod = SearchAttribute.SearchMethods.Contains)]
     public required string Text { get; set; }
 
     [ForeignKey(nameof(CorrectAnswer))]
     public string? CorrectAnswerId { get; set; }
     public Answer? CorrectAnswer { get; set; }
 
+    [Search]
     [InverseProperty(nameof(Answer.Question))]
     public ICollection<Answer> Answers { get; set; } = [];
 }
