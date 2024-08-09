@@ -2,19 +2,28 @@
   <v-container>
     <h1>Question Editor</h1>
 
-    <c-input :model="question" for="text" />
-    <c-input
-      :model="question"
-      for="correctAnswer"
-      :params="{ dataSource: answersForQuestionDataSource }"
-    />
+    <c-loader-status :loaders="[question.$bulkSave]" />
+    <c-loader-status no-initial-content :loaders="[question.$load]">
+      <c-input :model="question" for="text" />
+      <c-input
+        :model="question"
+        for="correctAnswer"
+        :params="{ dataSource: answersForQuestionDataSource }"
+      />
 
-    <h3>Answers</h3>
-    <div v-for="answer in question.answers" :key="answer.$stableId">
-      <c-input :model="answer" for="text" />
-    </div>
+      <h3>Answers</h3>
+      <div v-for="answer in question.answers" :key="answer.$stableId">
+        <c-input :model="answer" for="text" />
+      </div>
 
-    <v-btn @click="save"> Save </v-btn>
+      <v-btn
+        @click="save"
+        :disabled="question.$bulkSave.isLoading"
+        :loading="question.$bulkSave.isLoading"
+      >
+        Save
+      </v-btn>
+    </c-loader-status>
   </v-container>
 </template>
 
