@@ -11,6 +11,7 @@ export interface AnswerViewModel extends $models.Answer {
   set question(value: QuestionViewModel | $models.Question | null);
 }
 export class AnswerViewModel extends ViewModel<$models.Answer, $apiClients.AnswerApiClient, string> implements $models.Answer  {
+  static DataSources = $models.Answer.DataSources;
   
   constructor(initialData?: DeepPartial<$models.Answer> | null) {
     super($metadata.Answer, new $apiClients.AnswerApiClient(), initialData)
@@ -19,6 +20,7 @@ export class AnswerViewModel extends ViewModel<$models.Answer, $apiClients.Answe
 defineProps(AnswerViewModel, $metadata.Answer)
 
 export class AnswerListViewModel extends ListViewModel<$models.Answer, $apiClients.AnswerApiClient, AnswerViewModel> {
+  static DataSources = $models.Answer.DataSources;
   
   constructor() {
     super($metadata.Answer, new $apiClients.AnswerApiClient())

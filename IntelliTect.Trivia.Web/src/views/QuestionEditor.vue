@@ -3,7 +3,11 @@
     <h1>Question Editor</h1>
 
     <c-input :model="question" for="text" />
-    <c-input :model="question" for="correctAnswer" />
+    <c-input
+      :model="question"
+      for="correctAnswer"
+      :params="{ dataSource: answersForQuestionDataSource }"
+    />
 
     <h3>Answers</h3>
     <div v-for="answer in question.answers" :key="answer.$stableId">
@@ -15,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import { Answer } from "@/models.g";
 import { QuestionViewModel } from "@/viewmodels.g";
 
 const props = defineProps<{
@@ -25,6 +30,10 @@ const question = new QuestionViewModel();
 question.$load(props.id);
 
 question.$useAutoSave({ deep: true });
+
+const answersForQuestionDataSource =
+  new Answer.DataSources.AnswersForQuestionDataSource();
+answersForQuestionDataSource.questionId = props.id;
 
 function save() {
   question.$bulkSave();

@@ -61,6 +61,19 @@ export const Answer = domain.types.Answer = {
   methods: {
   },
   dataSources: {
+    answersForQuestionDataSource: {
+      type: "dataSource",
+      name: "AnswersForQuestionDataSource",
+      displayName: "Answers For Question Data Source",
+      props: {
+        questionId: {
+          name: "questionId",
+          displayName: "Question Id",
+          type: "string",
+          role: "value",
+        },
+      },
+    },
   },
 }
 export const Question = domain.types.Question = {

@@ -14,4 +14,22 @@ public class Answer
     [Required]
     public string QuestionId { get; set; } = null!;
     public Question? Question { get; set; }
+
+    public class AnswersForQuestionDataSource(CrudContext<AppDbContext> context) : StandardDataSource<Answer, AppDbContext>(context)
+    {
+        [Coalesce]
+        public string? QuestionId { get; set; }
+
+        public override IQueryable<Answer> GetQuery(IDataSourceParameters parameters)
+        {
+            var query = base.GetQuery(parameters);
+            
+            if(QuestionId is not null)
+            {
+                query = query.Where(x => x.QuestionId == QuestionId);
+            }
+
+            return query;
+        }
+    }
 }
