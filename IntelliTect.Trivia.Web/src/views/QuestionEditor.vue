@@ -13,9 +13,17 @@
 
       <h3>Answers</h3>
       <div v-for="answer in question.answers" :key="answer.$stableId">
-        <c-input :model="answer" for="text" />
+        <v-row dense>
+          <v-col>
+            <c-input :model="answer" for="text" />
+          </v-col>
+          <v-col cols="auto" align="right">
+            <v-btn @click="answer.$delete()">Delete</v-btn>
+          </v-col>
+        </v-row>
       </div>
 
+      <v-btn @click="addNewAnswer()" class="mr-2"> Add </v-btn>
       <v-btn
         @click="save"
         :disabled="question.$bulkSave.isLoading"
@@ -46,5 +54,9 @@ answersForQuestionDataSource.questionId = props.id;
 
 function save() {
   question.$bulkSave();
+}
+
+function addNewAnswer() {
+  question.addToAnswers();
 }
 </script>
