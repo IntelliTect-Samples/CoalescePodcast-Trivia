@@ -144,6 +144,29 @@ export const Question = domain.types.Question = {
   dataSources: {
   },
 }
+export const QuestionService = domain.services.QuestionService = {
+  name: "QuestionService",
+  displayName: "Question Service",
+  type: "service",
+  controllerRoute: "QuestionService",
+  methods: {
+    getRandomQuestion: {
+      name: "getRandomQuestion",
+      displayName: "Get Random Question",
+      transportType: "item",
+      httpMethod: "POST",
+      params: {
+      },
+      return: {
+        name: "$return",
+        displayName: "Result",
+        type: "model",
+        get typeDef() { return (domain.types.Question as ModelType) },
+        role: "value",
+      },
+    },
+  },
+}
 
 interface AppDomain extends Domain {
   enums: {
@@ -153,6 +176,7 @@ interface AppDomain extends Domain {
     Question: typeof Question
   }
   services: {
+    QuestionService: typeof QuestionService
   }
 }
 

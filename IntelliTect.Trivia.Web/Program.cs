@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using IntelliTect.Trivia.Data;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using IntelliTect.Trivia.Data.Services;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -41,6 +42,7 @@ services.AddDbContext<AppDbContext>(options => options
 );
 
 services.AddCoalesce<AppDbContext>();
+services.AddScoped<IQuestionService, QuestionService>();
 
 services
     .AddMvc()

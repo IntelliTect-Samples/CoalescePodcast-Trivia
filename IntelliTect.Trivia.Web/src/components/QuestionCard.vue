@@ -18,7 +18,7 @@
       <v-chip
         @click="selectAnswer(answer)"
         v-for="answer in question.answers"
-        :key="answer.$stableId"
+        :key="answer.answerId!"
         class="mx-1"
         :color="answerColor(answer)"
       >
@@ -29,19 +29,19 @@
 </template>
 
 <script setup lang="ts">
-import { AnswerViewModel, QuestionViewModel } from "@/viewmodels.g";
+import { Answer, Question } from "@/models.g";
 
 const props = defineProps<{
-  question: QuestionViewModel;
+  question: Question;
 }>();
 
-const selectedAnswer = ref<AnswerViewModel | null>(null);
+const selectedAnswer = ref<Answer | null>(null);
 
-function selectAnswer(answer: AnswerViewModel) {
+function selectAnswer(answer: Answer) {
   selectedAnswer.value = answer;
 }
 
-function answerColor(answer: AnswerViewModel) {
+function answerColor(answer: Answer) {
   if (selectedAnswer.value === null) {
     return "grey";
   }

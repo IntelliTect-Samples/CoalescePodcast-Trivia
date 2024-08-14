@@ -12,3 +12,15 @@ export class QuestionApiClient extends ModelApiClient<$models.Question> {
 }
 
 
+export class QuestionServiceApiClient extends ServiceApiClient<typeof $metadata.QuestionService> {
+  constructor() { super($metadata.QuestionService) }
+  public getRandomQuestion($config?: AxiosRequestConfig): AxiosPromise<ItemResult<$models.Question>> {
+    const $method = this.$metadata.methods.getRandomQuestion
+    const $params =  {
+    }
+    return this.$invoke($method, $params, $config)
+  }
+  
+}
+
+

@@ -58,6 +58,25 @@ export class QuestionListViewModel extends ListViewModel<$models.Question, $apiC
 }
 
 
+export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.QuestionService, $apiClients.QuestionServiceApiClient> {
+  
+  public get getRandomQuestion() {
+    const getRandomQuestion = this.$apiClient.$makeCaller(
+      this.$metadata.methods.getRandomQuestion,
+      (c) => c.getRandomQuestion(),
+      () => ({}),
+      (c, args) => c.getRandomQuestion())
+    
+    Object.defineProperty(this, 'getRandomQuestion', {value: getRandomQuestion});
+    return getRandomQuestion
+  }
+  
+  constructor() {
+    super($metadata.QuestionService, new $apiClients.QuestionServiceApiClient())
+  }
+}
+
+
 const viewModelTypeLookup = ViewModel.typeLookup = {
   Answer: AnswerViewModel,
   Question: QuestionViewModel,
@@ -67,5 +86,6 @@ const listViewModelTypeLookup = ListViewModel.typeLookup = {
   Question: QuestionListViewModel,
 }
 const serviceViewModelTypeLookup = ServiceViewModel.typeLookup = {
+  QuestionService: QuestionServiceViewModel,
 }
 
