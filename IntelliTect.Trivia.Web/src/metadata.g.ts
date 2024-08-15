@@ -7,6 +7,43 @@ import {
 
 
 const domain: Domain = { enums: {}, types: {}, services: {} }
+export const Category = domain.enums.Category = {
+  name: "Category",
+  displayName: "Category",
+  type: "enum",
+  ...getEnumMeta<"General"|"Science"|"History"|"Geography"|"Literature"|"Technology">([
+  {
+    value: 0,
+    strValue: "General",
+    displayName: "General",
+  },
+  {
+    value: 1,
+    strValue: "Science",
+    displayName: "Science",
+  },
+  {
+    value: 2,
+    strValue: "History",
+    displayName: "History",
+  },
+  {
+    value: 3,
+    strValue: "Geography",
+    displayName: "Geography",
+  },
+  {
+    value: 4,
+    strValue: "Literature",
+    displayName: "Literature",
+  },
+  {
+    value: 5,
+    strValue: "Technology",
+    displayName: "Technology",
+  },
+  ]),
+}
 export const Answer = domain.types.Answer = {
   name: "Answer",
   displayName: "Answer",
@@ -102,6 +139,13 @@ export const Question = domain.types.Question = {
         required: val => (val != null && val !== '') || "Text is required.",
       }
     },
+    category: {
+      name: "category",
+      displayName: "Category",
+      type: "enum",
+      get typeDef() { return domain.enums.Category },
+      role: "value",
+    },
     correctAnswerId: {
       name: "correctAnswerId",
       displayName: "Correct Answer Id",
@@ -170,6 +214,7 @@ export const QuestionService = domain.services.QuestionService = {
 
 interface AppDomain extends Domain {
   enums: {
+    Category: typeof Category
   }
   types: {
     Answer: typeof Answer

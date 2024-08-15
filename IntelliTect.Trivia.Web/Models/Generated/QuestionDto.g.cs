@@ -14,6 +14,7 @@ namespace IntelliTect.Trivia.Web.Models
 
         private string _QuestionId;
         private string _Text;
+        private IntelliTect.Trivia.Data.Models.Category? _Category;
         private string _CorrectAnswerId;
 
         public string QuestionId
@@ -25,6 +26,11 @@ namespace IntelliTect.Trivia.Web.Models
         {
             get => _Text;
             set { _Text = value; Changed(nameof(Text)); }
+        }
+        public IntelliTect.Trivia.Data.Models.Category? Category
+        {
+            get => _Category;
+            set { _Category = value; Changed(nameof(Category)); }
         }
         public string CorrectAnswerId
         {
@@ -42,6 +48,7 @@ namespace IntelliTect.Trivia.Web.Models
             if (OnUpdate(entity, context)) return;
 
             if (ShouldMapTo(nameof(Text))) entity.Text = Text;
+            if (ShouldMapTo(nameof(Category))) entity.Category = (Category ?? entity.Category);
             if (ShouldMapTo(nameof(CorrectAnswerId))) entity.CorrectAnswerId = CorrectAnswerId;
         }
 
@@ -59,6 +66,7 @@ namespace IntelliTect.Trivia.Web.Models
             };
 
             if (OnUpdate(entity, context)) return entity;
+            if (ShouldMapTo(nameof(Category))) entity.Category = (Category ?? entity.Category);
             if (ShouldMapTo(nameof(CorrectAnswerId))) entity.CorrectAnswerId = CorrectAnswerId;
 
             return entity;
@@ -71,6 +79,7 @@ namespace IntelliTect.Trivia.Web.Models
 
         public string QuestionId { get; set; }
         public string Text { get; set; }
+        public IntelliTect.Trivia.Data.Models.Category? Category { get; set; }
         public string CorrectAnswerId { get; set; }
         public IntelliTect.Trivia.Web.Models.AnswerResponse CorrectAnswer { get; set; }
         public System.Collections.Generic.ICollection<IntelliTect.Trivia.Web.Models.AnswerResponse> Answers { get; set; }
@@ -85,6 +94,7 @@ namespace IntelliTect.Trivia.Web.Models
 
             this.QuestionId = obj.QuestionId;
             this.Text = obj.Text;
+            this.Category = obj.Category;
             this.CorrectAnswerId = obj.CorrectAnswerId;
             if (tree == null || tree[nameof(this.CorrectAnswer)] != null)
                 this.CorrectAnswer = obj.CorrectAnswer.MapToDto<IntelliTect.Trivia.Data.Models.Answer, AnswerResponse>(context, tree?[nameof(this.CorrectAnswer)]);

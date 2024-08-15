@@ -1,6 +1,16 @@
 import * as metadata from './metadata.g'
 import { Model, DataSource, convertToModel, mapToModel, reactiveDataSource } from 'coalesce-vue/lib/model'
 
+export enum Category {
+  General = 0,
+  Science = 1,
+  History = 2,
+  Geography = 3,
+  Literature = 4,
+  Technology = 5,
+}
+
+
 export interface Answer extends Model<typeof metadata.Answer> {
   answerId: string | null
   text: string | null
@@ -45,6 +55,7 @@ export namespace Answer {
 export interface Question extends Model<typeof metadata.Question> {
   questionId: string | null
   text: string | null
+  category: Category | null
   correctAnswerId: string | null
   correctAnswer: Answer | null
   answers: Answer[] | null

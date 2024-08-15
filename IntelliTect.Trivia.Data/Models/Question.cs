@@ -1,5 +1,16 @@
 ﻿
 namespace IntelliTect.Trivia.Data.Models;
+
+public enum Category
+{
+    General = 0,
+    Science = 1,
+    History = 2,
+    Geography = 3,
+    Literature = 4,
+    Technology = 5
+}
+
 public class Question
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -9,6 +20,8 @@ public class Question
     [ListText]
     [Search(SearchMethod = SearchAttribute.SearchMethods.Contains)]
     public required string Text { get; set; }
+
+    public Category Category { get; set; }
 
     [ForeignKey(nameof(CorrectAnswer))]
     public string? CorrectAnswerId { get; set; }

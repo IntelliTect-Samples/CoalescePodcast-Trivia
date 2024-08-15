@@ -31,6 +31,7 @@ export class AnswerListViewModel extends ListViewModel<$models.Answer, $apiClien
 export interface QuestionViewModel extends $models.Question {
   questionId: string | null;
   text: string | null;
+  category: $models.Category | null;
   correctAnswerId: string | null;
   get correctAnswer(): AnswerViewModel | null;
   set correctAnswer(value: AnswerViewModel | $models.Answer | null);

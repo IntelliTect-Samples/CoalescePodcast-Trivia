@@ -10,6 +10,7 @@
         for="correctAnswer"
         :params="{ dataSource: answersForQuestionDataSource }"
       />
+      <c-input :model="question" for="category" />
 
       <h3>Answers</h3>
       <div v-for="answer in question.answers" :key="answer.$stableId">

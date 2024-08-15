@@ -1,17 +1,27 @@
 <template>
   <v-card>
     <v-sheet color="secondary">
-      <v-card-title
-        >{{ question.text }}
-        <v-btn
-          class="ml-2"
-          variant="tonal"
-          icon
-          :to="{ name: 'question', params: { id: question.questionId } }"
-        >
-          <v-icon>fa-solid fa-pencil</v-icon>
-        </v-btn>
-      </v-card-title>
+      <v-row>
+        <v-col>
+          <v-card-title
+            >{{ question.text }}
+            <v-btn
+              class="ml-2"
+              variant="tonal"
+              icon
+              :to="{ name: 'question', params: { id: question.questionId } }"
+            >
+              <v-icon>fa-solid fa-pencil</v-icon>
+            </v-btn>
+          </v-card-title>
+        </v-col>
+        <v-col cols="auto" align="right">
+          <v-card-title>
+            <v-chip>{{ Category[question.category ?? 0] }}</v-chip>
+          </v-card-title>
+        </v-col>
+      </v-row>
+      <v-spacer />
     </v-sheet>
 
     <v-card-text>
@@ -29,14 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { Answer, Question } from "@/models.g";
+import { Answer, Question, Category } from "@/models.g";
 
 const props = defineProps<{
   question: Question;
 }>();
-
 const selectedAnswer = ref<Answer | null>(null);
-
 function selectAnswer(answer: Answer) {
   selectedAnswer.value = answer;
 }
