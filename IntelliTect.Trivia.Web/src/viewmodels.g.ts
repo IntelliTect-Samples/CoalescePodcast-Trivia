@@ -39,6 +39,7 @@ export interface QuestionViewModel extends $models.Question {
   set answers(value: (AnswerViewModel | $models.Answer)[] | null);
 }
 export class QuestionViewModel extends ViewModel<$models.Question, $apiClients.QuestionApiClient, string> implements $models.Question  {
+  static DataSources = $models.Question.DataSources;
   
   
   public addToAnswers(initialData?: DeepPartial<$models.Answer> | null) {
@@ -52,6 +53,7 @@ export class QuestionViewModel extends ViewModel<$models.Question, $apiClients.Q
 defineProps(QuestionViewModel, $metadata.Question)
 
 export class QuestionListViewModel extends ListViewModel<$models.Question, $apiClients.QuestionApiClient, QuestionViewModel> {
+  static DataSources = $models.Question.DataSources;
   
   constructor() {
     super($metadata.Question, new $apiClients.QuestionApiClient())

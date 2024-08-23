@@ -186,6 +186,19 @@ export const Question = domain.types.Question = {
   methods: {
   },
   dataSources: {
+    questionsDataSource: {
+      type: "dataSource",
+      name: "QuestionsDataSource",
+      displayName: "Questions Data Source",
+      props: {
+        correctAnswerText: {
+          name: "correctAnswerText",
+          displayName: "Correct Answer Text",
+          type: "string",
+          role: "value",
+        },
+      },
+    },
   },
 }
 export const QuestionService = domain.services.QuestionService = {

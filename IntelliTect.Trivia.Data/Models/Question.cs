@@ -31,6 +31,26 @@ public class Question
     [InverseProperty(nameof(Answer.Question))]
     public ICollection<Answer> Answers { get; set; } = [];
 
+    public class QuestionsDataSource(CrudContext<AppDbContext> context) : StandardDataSource<Question, AppDbContext>(context)
+    {
+        [Coalesce]
+        public string? CorrectAnswerText { get; set; }
+
+        public override IQueryable<Question> GetQuery(IDataSourceParameters parameters)
+        {
+            IQueryable<Question> questions = base.GetQuery(parameters);
+
+            if (CorrectAnswerText is not null)
+            {
+                return questions
+                    .Where(q => q.CorrectAnswer != null)
+                    .Where(q => q.CorrectAnswer!.Text.Contains(CorrectAnswerText));
+            }
+
+            return questions;
+        }
+    }
+
     public class QuestionBehaviors(CrudContext<AppDbContext> context) : StandardBehaviors<Question, AppDbContext>(context)
     {
         public override ItemResult BeforeSave(SaveKind kind, Question? oldItem, Question item)
@@ -39,7 +59,7 @@ public class Question
             if (oldItem?.CorrectAnswerId != item.CorrectAnswerId && item.CorrectAnswerId is not null)
             {
                 var correctAnswer = Db.Answers.Where(x => x.AnswerId == item.CorrectAnswerId).FirstOrDefault();
-                if(correctAnswer?.QuestionId != item.QuestionId)
+                if (correctAnswer?.QuestionId != item.QuestionId)
                 {
                     return "Correct answer must be a child of the question.";
                 }

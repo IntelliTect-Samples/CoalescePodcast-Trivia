@@ -10,6 +10,13 @@
     <h1>Questions</h1>
 
     <v-row>
+      <v-col cols="12">
+        <v-text-field
+          v-model="dataSource.correctAnswerText"
+          label="Search Correct Answer"
+          hide-details
+        />
+      </v-col>
       <v-col>
         <v-text-field v-model="questions.$params.search" label="Search" />
       </v-col>
@@ -45,6 +52,7 @@
 
 <script setup lang="ts">
 import { Category as CategoryMetadata } from "@/metadata.g";
+import { Question } from "@/models.g";
 import {
   QuestionListViewModel,
   QuestionServiceViewModel,
@@ -53,6 +61,8 @@ import {
 const filterBy = ref<number[]>([]);
 
 const questions = new QuestionListViewModel();
+const dataSource = new Question.DataSources.QuestionsDataSource();
+questions.$dataSource = dataSource;
 questions.$load();
 questions.$useAutoLoad();
 

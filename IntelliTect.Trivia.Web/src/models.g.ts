@@ -79,5 +79,19 @@ export class Question {
     Object.assign(this, Question.map(data || {}));
   }
 }
+export namespace Question {
+  export namespace DataSources {
+    
+    export class QuestionsDataSource implements DataSource<typeof metadata.Question.dataSources.questionsDataSource> {
+      readonly $metadata = metadata.Question.dataSources.questionsDataSource
+      correctAnswerText: string | null = null
+      
+      constructor(params?: Omit<Partial<QuestionsDataSource>, '$metadata'>) {
+        if (params) Object.assign(this, params);
+        return reactiveDataSource(this);
+      }
+    }
+  }
+}
 
 
