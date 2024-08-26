@@ -11,6 +11,10 @@ public enum Category
     Technology = 5
 }
 
+[Read(SecurityPermissionLevels.AllowAll)]
+[Edit(SecurityPermissionLevels.AllowAuthorized)]
+[Create(SecurityPermissionLevels.AllowAuthorized)]
+[Delete(SecurityPermissionLevels.AllowAuthorized)]
 public class Question
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -24,6 +28,7 @@ public class Question
     public Category Category { get; set; }
 
     [ForeignKey(nameof(CorrectAnswer))]
+    [Edit(Roles = "Admin")]
     public string? CorrectAnswerId { get; set; }
     public Answer? CorrectAnswer { get; set; }
 

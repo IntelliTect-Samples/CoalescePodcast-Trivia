@@ -33,7 +33,7 @@ namespace IntelliTect.Trivia.Web.Api
         }
 
         [HttpGet("get/{id}")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ItemResult<QuestionResponse>> Get(
             string id,
             DataSourceParameters parameters,
@@ -41,14 +41,14 @@ namespace IntelliTect.Trivia.Web.Api
             => GetImplementation(id, parameters, dataSource);
 
         [HttpGet("list")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ListResult<QuestionResponse>> List(
             ListParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.Question> dataSource)
             => ListImplementation(parameters, dataSource);
 
         [HttpGet("count")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ItemResult<int>> Count(
             FilterParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.Question> dataSource)
@@ -64,7 +64,7 @@ namespace IntelliTect.Trivia.Web.Api
             => SaveImplementation(dto, parameters, dataSource, behaviors);
 
         [HttpPost("bulkSave")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ItemResult<QuestionResponse>> BulkSave(
             [FromBody] BulkSaveRequest dto,
             [FromQuery] DataSourceParameters parameters,

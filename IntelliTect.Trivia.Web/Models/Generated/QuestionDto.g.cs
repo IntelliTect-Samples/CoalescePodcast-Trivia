@@ -49,7 +49,7 @@ namespace IntelliTect.Trivia.Web.Models
 
             if (ShouldMapTo(nameof(Text))) entity.Text = Text;
             if (ShouldMapTo(nameof(Category))) entity.Category = (Category ?? entity.Category);
-            if (ShouldMapTo(nameof(CorrectAnswerId))) entity.CorrectAnswerId = CorrectAnswerId;
+            if (ShouldMapTo(nameof(CorrectAnswerId)) && (context.IsInRoleCached("Admin"))) entity.CorrectAnswerId = CorrectAnswerId;
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace IntelliTect.Trivia.Web.Models
 
             if (OnUpdate(entity, context)) return entity;
             if (ShouldMapTo(nameof(Category))) entity.Category = (Category ?? entity.Category);
-            if (ShouldMapTo(nameof(CorrectAnswerId))) entity.CorrectAnswerId = CorrectAnswerId;
+            if (ShouldMapTo(nameof(CorrectAnswerId)) && (context.IsInRoleCached("Admin"))) entity.CorrectAnswerId = CorrectAnswerId;
 
             return entity;
         }

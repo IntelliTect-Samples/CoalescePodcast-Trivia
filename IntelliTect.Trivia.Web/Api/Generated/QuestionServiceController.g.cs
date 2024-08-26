@@ -40,7 +40,7 @@ namespace IntelliTect.Trivia.Web.Api
         /// Method: GetRandomQuestion
         /// </summary>
         [HttpPost("GetRandomQuestion")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual ItemResult<QuestionResponse> GetRandomQuestion()
         {
             IncludeTree includeTree = null;
