@@ -201,6 +201,69 @@ export const Question = domain.types.Question = {
     },
   },
 }
+export const PublicAnswerDto = domain.types.PublicAnswerDto = {
+  name: "PublicAnswerDto",
+  displayName: "Public Answer Dto",
+  type: "object",
+  props: {
+    answerId: {
+      name: "answerId",
+      displayName: "Answer Id",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Answer Id is required.",
+      }
+    },
+    text: {
+      name: "text",
+      displayName: "Text",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Text is required.",
+      }
+    },
+  },
+}
+export const PublicQuestionDto = domain.types.PublicQuestionDto = {
+  name: "PublicQuestionDto",
+  displayName: "Public Question Dto",
+  type: "object",
+  props: {
+    questionId: {
+      name: "questionId",
+      displayName: "Question Id",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Question Id is required.",
+      }
+    },
+    text: {
+      name: "text",
+      displayName: "Text",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Text is required.",
+      }
+    },
+    answers: {
+      name: "answers",
+      displayName: "Answers",
+      type: "collection",
+      itemType: {
+        name: "$collectionItem",
+        displayName: "",
+        role: "value",
+        type: "object",
+        get typeDef() { return (domain.types.PublicAnswerDto as ObjectType) },
+      },
+      role: "value",
+    },
+  },
+}
 export const QuestionService = domain.services.QuestionService = {
   name: "QuestionService",
   displayName: "Question Service",
@@ -217,8 +280,31 @@ export const QuestionService = domain.services.QuestionService = {
       return: {
         name: "$return",
         displayName: "Result",
-        type: "model",
-        get typeDef() { return (domain.types.Question as ModelType) },
+        type: "object",
+        get typeDef() { return (domain.types.PublicQuestionDto as ObjectType) },
+        role: "value",
+      },
+    },
+    guessAnswer: {
+      name: "guessAnswer",
+      displayName: "Guess Answer",
+      transportType: "item",
+      httpMethod: "POST",
+      params: {
+        answerId: {
+          name: "answerId",
+          displayName: "Answer Id",
+          type: "string",
+          role: "value",
+          rules: {
+            required: val => (val != null && val !== '') || "Answer Id is required.",
+          }
+        },
+      },
+      return: {
+        name: "$return",
+        displayName: "Result",
+        type: "boolean",
         role: "value",
       },
     },
@@ -231,6 +317,8 @@ interface AppDomain extends Domain {
   }
   types: {
     Answer: typeof Answer
+    PublicAnswerDto: typeof PublicAnswerDto
+    PublicQuestionDto: typeof PublicQuestionDto
     Question: typeof Question
   }
   services: {

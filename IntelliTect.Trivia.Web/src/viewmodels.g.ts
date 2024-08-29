@@ -74,6 +74,17 @@ export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.
     return getRandomQuestion
   }
   
+  public get guessAnswer() {
+    const guessAnswer = this.$apiClient.$makeCaller(
+      this.$metadata.methods.guessAnswer,
+      (c, answerId: string | null) => c.guessAnswer(answerId),
+      () => ({answerId: null as string | null, }),
+      (c, args) => c.guessAnswer(args.answerId))
+    
+    Object.defineProperty(this, 'guessAnswer', {value: guessAnswer});
+    return guessAnswer
+  }
+  
   constructor() {
     super($metadata.QuestionService, new $apiClients.QuestionServiceApiClient())
   }

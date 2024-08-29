@@ -95,3 +95,54 @@ export namespace Question {
 }
 
 
+export interface PublicAnswerDto extends Model<typeof metadata.PublicAnswerDto> {
+  answerId: string | null
+  text: string | null
+}
+export class PublicAnswerDto {
+  
+  /** Mutates the input object and its descendents into a valid PublicAnswerDto implementation. */
+  static convert(data?: Partial<PublicAnswerDto>): PublicAnswerDto {
+    return convertToModel(data || {}, metadata.PublicAnswerDto) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid PublicAnswerDto implementation. */
+  static map(data?: Partial<PublicAnswerDto>): PublicAnswerDto {
+    return mapToModel(data || {}, metadata.PublicAnswerDto) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.PublicAnswerDto; }
+  
+  /** Instantiate a new PublicAnswerDto, optionally basing it on the given data. */
+  constructor(data?: Partial<PublicAnswerDto> | {[k: string]: any}) {
+    Object.assign(this, PublicAnswerDto.map(data || {}));
+  }
+}
+
+
+export interface PublicQuestionDto extends Model<typeof metadata.PublicQuestionDto> {
+  questionId: string | null
+  text: string | null
+  answers: PublicAnswerDto[] | null
+}
+export class PublicQuestionDto {
+  
+  /** Mutates the input object and its descendents into a valid PublicQuestionDto implementation. */
+  static convert(data?: Partial<PublicQuestionDto>): PublicQuestionDto {
+    return convertToModel(data || {}, metadata.PublicQuestionDto) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid PublicQuestionDto implementation. */
+  static map(data?: Partial<PublicQuestionDto>): PublicQuestionDto {
+    return mapToModel(data || {}, metadata.PublicQuestionDto) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.PublicQuestionDto; }
+  
+  /** Instantiate a new PublicQuestionDto, optionally basing it on the given data. */
+  constructor(data?: Partial<PublicQuestionDto> | {[k: string]: any}) {
+    Object.assign(this, PublicQuestionDto.map(data || {}));
+  }
+}
+
+
