@@ -1,4 +1,4 @@
-﻿using IntelliTect.Trivia.Data.Models;
+﻿using IntelliTect.Trivia.Data.Dtos;
 
 namespace IntelliTect.Trivia.Data.Services;
 
@@ -6,5 +6,8 @@ namespace IntelliTect.Trivia.Data.Services;
 public interface IQuestionService
 {
     [Execute(SecurityPermissionLevels.AllowAll)]
-    Question GetRandomQuestion();
+    PublicQuestionDto GetRandomQuestion();
+
+    [Execute(SecurityPermissionLevels.AllowAll)]
+    bool GuessAnswer(string answerId);
 }

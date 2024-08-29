@@ -7,6 +7,28 @@ import {
 
 
 const domain: Domain = { enums: {}, types: {}, services: {} }
+export const AuditEntryState = domain.enums.AuditEntryState = {
+  name: "AuditEntryState",
+  displayName: "Audit Entry State",
+  type: "enum",
+  ...getEnumMeta<"EntityAdded"|"EntityDeleted"|"EntityModified">([
+  {
+    value: 0,
+    strValue: "EntityAdded",
+    displayName: "Entity Added",
+  },
+  {
+    value: 1,
+    strValue: "EntityDeleted",
+    displayName: "Entity Deleted",
+  },
+  {
+    value: 2,
+    strValue: "EntityModified",
+    displayName: "Entity Modified",
+  },
+  ]),
+}
 export const Category = domain.enums.Category = {
   name: "Category",
   displayName: "Category",
@@ -113,105 +135,156 @@ export const Answer = domain.types.Answer = {
     },
   },
 }
-export const AppUser = domain.types.AppUser = {
-  name: "AppUser",
-  displayName: "App User",
-  get displayProp() { return this.props.id }, 
+export const AuditLog = domain.types.AuditLog = {
+  name: "AuditLog",
+  displayName: "Audit Log",
+  get displayProp() { return this.props.type }, 
   type: "model",
-  controllerRoute: "AppUser",
+  controllerRoute: "AuditLog",
   get keyProp() { return this.props.id }, 
-  behaviorFlags: 7 as BehaviorFlags,
+  behaviorFlags: 0 as BehaviorFlags,
   props: {
     id: {
       name: "id",
       displayName: "Id",
-      type: "string",
+      type: "number",
       role: "primaryKey",
       hidden: 3 as HiddenAreas,
     },
-    userName: {
-      name: "userName",
-      displayName: "User Name",
+    type: {
+      name: "type",
+      displayName: "Type",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Type is required.",
+        maxLength: val => !val || val.length <= 100 || "Type may not be more than 100 characters.",
+      }
+    },
+    keyValue: {
+      name: "keyValue",
+      displayName: "Key Value",
       type: "string",
       role: "value",
     },
-    normalizedUserName: {
-      name: "normalizedUserName",
-      displayName: "Normalized User Name",
+    description: {
+      name: "description",
+      displayName: "Description",
       type: "string",
       role: "value",
     },
-    email: {
-      name: "email",
-      displayName: "Email",
-      type: "string",
+    state: {
+      name: "state",
+      displayName: "Change Type",
+      type: "enum",
+      get typeDef() { return domain.enums.AuditEntryState },
       role: "value",
     },
-    normalizedEmail: {
-      name: "normalizedEmail",
-      displayName: "Normalized Email",
-      type: "string",
-      role: "value",
-    },
-    emailConfirmed: {
-      name: "emailConfirmed",
-      displayName: "Email Confirmed",
-      type: "boolean",
-      role: "value",
-    },
-    passwordHash: {
-      name: "passwordHash",
-      displayName: "Password Hash",
-      type: "string",
-      role: "value",
-    },
-    securityStamp: {
-      name: "securityStamp",
-      displayName: "Security Stamp",
-      type: "string",
-      role: "value",
-    },
-    concurrencyStamp: {
-      name: "concurrencyStamp",
-      displayName: "Concurrency Stamp",
-      type: "string",
-      role: "value",
-    },
-    phoneNumber: {
-      name: "phoneNumber",
-      displayName: "Phone Number",
-      type: "string",
-      role: "value",
-    },
-    phoneNumberConfirmed: {
-      name: "phoneNumberConfirmed",
-      displayName: "Phone Number Confirmed",
-      type: "boolean",
-      role: "value",
-    },
-    twoFactorEnabled: {
-      name: "twoFactorEnabled",
-      displayName: "Two Factor Enabled",
-      type: "boolean",
-      role: "value",
-    },
-    lockoutEnd: {
-      name: "lockoutEnd",
-      displayName: "Lockout End",
+    date: {
+      name: "date",
+      displayName: "Date",
       type: "date",
       dateKind: "datetime",
       role: "value",
     },
-    lockoutEnabled: {
-      name: "lockoutEnabled",
-      displayName: "Lockout Enabled",
-      type: "boolean",
+    properties: {
+      name: "properties",
+      displayName: "Properties",
+      type: "collection",
+      itemType: {
+        name: "$collectionItem",
+        displayName: "",
+        role: "value",
+        type: "model",
+        get typeDef() { return (domain.types.AuditLogProperty as ModelType) },
+      },
+      role: "collectionNavigation",
+      get foreignKey() { return (domain.types.AuditLogProperty as ModelType).props.parentId as ForeignKeyProperty },
+      dontSerialize: true,
+    },
+    clientIp: {
+      name: "clientIp",
+      displayName: "Client IP",
+      type: "string",
       role: "value",
     },
-    accessFailedCount: {
-      name: "accessFailedCount",
-      displayName: "Access Failed Count",
+    referrer: {
+      name: "referrer",
+      displayName: "Referrer",
+      type: "string",
+      role: "value",
+    },
+    endpoint: {
+      name: "endpoint",
+      displayName: "Endpoint",
+      type: "string",
+      role: "value",
+    },
+  },
+  methods: {
+  },
+  dataSources: {
+  },
+}
+export const AuditLogProperty = domain.types.AuditLogProperty = {
+  name: "AuditLogProperty",
+  displayName: "Audit Log Property",
+  get displayProp() { return this.props.propertyName }, 
+  type: "model",
+  controllerRoute: "AuditLogProperty",
+  get keyProp() { return this.props.id }, 
+  behaviorFlags: 0 as BehaviorFlags,
+  props: {
+    id: {
+      name: "id",
+      displayName: "Id",
       type: "number",
+      role: "primaryKey",
+      hidden: 3 as HiddenAreas,
+    },
+    parentId: {
+      name: "parentId",
+      displayName: "Parent Id",
+      type: "number",
+      role: "foreignKey",
+      get principalKey() { return (domain.types.AuditLog as ModelType).props.id as PrimaryKeyProperty },
+      get principalType() { return (domain.types.AuditLog as ModelType) },
+      rules: {
+        required: val => val != null || "Parent Id is required.",
+      }
+    },
+    propertyName: {
+      name: "propertyName",
+      displayName: "Property Name",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Property Name is required.",
+        maxLength: val => !val || val.length <= 100 || "Property Name may not be more than 100 characters.",
+      }
+    },
+    oldValue: {
+      name: "oldValue",
+      displayName: "Old Value",
+      type: "string",
+      role: "value",
+    },
+    oldValueDescription: {
+      name: "oldValueDescription",
+      displayName: "Old Value Description",
+      type: "string",
+      role: "value",
+    },
+    newValue: {
+      name: "newValue",
+      displayName: "New Value",
+      type: "string",
+      role: "value",
+    },
+    newValueDescription: {
+      name: "newValueDescription",
+      displayName: "New Value Description",
+      type: "string",
       role: "value",
     },
   },
@@ -308,6 +381,69 @@ export const Question = domain.types.Question = {
     },
   },
 }
+export const PublicAnswerDto = domain.types.PublicAnswerDto = {
+  name: "PublicAnswerDto",
+  displayName: "Public Answer Dto",
+  type: "object",
+  props: {
+    answerId: {
+      name: "answerId",
+      displayName: "Answer Id",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Answer Id is required.",
+      }
+    },
+    text: {
+      name: "text",
+      displayName: "Text",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Text is required.",
+      }
+    },
+  },
+}
+export const PublicQuestionDto = domain.types.PublicQuestionDto = {
+  name: "PublicQuestionDto",
+  displayName: "Public Question Dto",
+  type: "object",
+  props: {
+    questionId: {
+      name: "questionId",
+      displayName: "Question Id",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Question Id is required.",
+      }
+    },
+    text: {
+      name: "text",
+      displayName: "Text",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Text is required.",
+      }
+    },
+    answers: {
+      name: "answers",
+      displayName: "Answers",
+      type: "collection",
+      itemType: {
+        name: "$collectionItem",
+        displayName: "",
+        role: "value",
+        type: "object",
+        get typeDef() { return (domain.types.PublicAnswerDto as ObjectType) },
+      },
+      role: "value",
+    },
+  },
+}
 export const QuestionService = domain.services.QuestionService = {
   name: "QuestionService",
   displayName: "Question Service",
@@ -324,8 +460,31 @@ export const QuestionService = domain.services.QuestionService = {
       return: {
         name: "$return",
         displayName: "Result",
-        type: "model",
-        get typeDef() { return (domain.types.Question as ModelType) },
+        type: "object",
+        get typeDef() { return (domain.types.PublicQuestionDto as ObjectType) },
+        role: "value",
+      },
+    },
+    guessAnswer: {
+      name: "guessAnswer",
+      displayName: "Guess Answer",
+      transportType: "item",
+      httpMethod: "POST",
+      params: {
+        answerId: {
+          name: "answerId",
+          displayName: "Answer Id",
+          type: "string",
+          role: "value",
+          rules: {
+            required: val => (val != null && val !== '') || "Answer Id is required.",
+          }
+        },
+      },
+      return: {
+        name: "$return",
+        displayName: "Result",
+        type: "boolean",
         role: "value",
       },
     },
@@ -334,11 +493,15 @@ export const QuestionService = domain.services.QuestionService = {
 
 interface AppDomain extends Domain {
   enums: {
+    AuditEntryState: typeof AuditEntryState
     Category: typeof Category
   }
   types: {
     Answer: typeof Answer
-    AppUser: typeof AppUser
+    AuditLog: typeof AuditLog
+    AuditLogProperty: typeof AuditLogProperty
+    PublicAnswerDto: typeof PublicAnswerDto
+    PublicQuestionDto: typeof PublicQuestionDto
     Question: typeof Question
   }
   services: {

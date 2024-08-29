@@ -28,35 +28,61 @@ export class AnswerListViewModel extends ListViewModel<$models.Answer, $apiClien
 }
 
 
-export interface AppUserViewModel extends $models.AppUser {
-  id: string | null;
-  userName: string | null;
-  normalizedUserName: string | null;
-  email: string | null;
-  normalizedEmail: string | null;
-  emailConfirmed: boolean | null;
-  passwordHash: string | null;
-  securityStamp: string | null;
-  concurrencyStamp: string | null;
-  phoneNumber: string | null;
-  phoneNumberConfirmed: boolean | null;
-  twoFactorEnabled: boolean | null;
-  lockoutEnd: Date | null;
-  lockoutEnabled: boolean | null;
-  accessFailedCount: number | null;
+export interface AuditLogViewModel extends $models.AuditLog {
+  id: number | null;
+  type: string | null;
+  keyValue: string | null;
+  description: string | null;
+  state: $models.AuditEntryState | null;
+  date: Date | null;
+  get properties(): ViewModelCollection<AuditLogPropertyViewModel, $models.AuditLogProperty>;
+  set properties(value: (AuditLogPropertyViewModel | $models.AuditLogProperty)[] | null);
+  clientIp: string | null;
+  referrer: string | null;
+  endpoint: string | null;
 }
-export class AppUserViewModel extends ViewModel<$models.AppUser, $apiClients.AppUserApiClient, string> implements $models.AppUser  {
+export class AuditLogViewModel extends ViewModel<$models.AuditLog, $apiClients.AuditLogApiClient, number> implements $models.AuditLog  {
   
-  constructor(initialData?: DeepPartial<$models.AppUser> | null) {
-    super($metadata.AppUser, new $apiClients.AppUserApiClient(), initialData)
+  
+  public addToProperties(initialData?: DeepPartial<$models.AuditLogProperty> | null) {
+    return this.$addChild('properties', initialData) as AuditLogPropertyViewModel
+  }
+  
+  constructor(initialData?: DeepPartial<$models.AuditLog> | null) {
+    super($metadata.AuditLog, new $apiClients.AuditLogApiClient(), initialData)
   }
 }
-defineProps(AppUserViewModel, $metadata.AppUser)
+defineProps(AuditLogViewModel, $metadata.AuditLog)
 
-export class AppUserListViewModel extends ListViewModel<$models.AppUser, $apiClients.AppUserApiClient, AppUserViewModel> {
+export class AuditLogListViewModel extends ListViewModel<$models.AuditLog, $apiClients.AuditLogApiClient, AuditLogViewModel> {
   
   constructor() {
-    super($metadata.AppUser, new $apiClients.AppUserApiClient())
+    super($metadata.AuditLog, new $apiClients.AuditLogApiClient())
+  }
+}
+
+
+export interface AuditLogPropertyViewModel extends $models.AuditLogProperty {
+  id: number | null;
+  parentId: number | null;
+  propertyName: string | null;
+  oldValue: string | null;
+  oldValueDescription: string | null;
+  newValue: string | null;
+  newValueDescription: string | null;
+}
+export class AuditLogPropertyViewModel extends ViewModel<$models.AuditLogProperty, $apiClients.AuditLogPropertyApiClient, number> implements $models.AuditLogProperty  {
+  
+  constructor(initialData?: DeepPartial<$models.AuditLogProperty> | null) {
+    super($metadata.AuditLogProperty, new $apiClients.AuditLogPropertyApiClient(), initialData)
+  }
+}
+defineProps(AuditLogPropertyViewModel, $metadata.AuditLogProperty)
+
+export class AuditLogPropertyListViewModel extends ListViewModel<$models.AuditLogProperty, $apiClients.AuditLogPropertyApiClient, AuditLogPropertyViewModel> {
+  
+  constructor() {
+    super($metadata.AuditLogProperty, new $apiClients.AuditLogPropertyApiClient())
   }
 }
 
@@ -107,6 +133,17 @@ export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.
     return getRandomQuestion
   }
   
+  public get guessAnswer() {
+    const guessAnswer = this.$apiClient.$makeCaller(
+      this.$metadata.methods.guessAnswer,
+      (c, answerId: string | null) => c.guessAnswer(answerId),
+      () => ({answerId: null as string | null, }),
+      (c, args) => c.guessAnswer(args.answerId))
+    
+    Object.defineProperty(this, 'guessAnswer', {value: guessAnswer});
+    return guessAnswer
+  }
+  
   constructor() {
     super($metadata.QuestionService, new $apiClients.QuestionServiceApiClient())
   }
@@ -115,12 +152,14 @@ export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.
 
 const viewModelTypeLookup = ViewModel.typeLookup = {
   Answer: AnswerViewModel,
-  AppUser: AppUserViewModel,
+  AuditLog: AuditLogViewModel,
+  AuditLogProperty: AuditLogPropertyViewModel,
   Question: QuestionViewModel,
 }
 const listViewModelTypeLookup = ListViewModel.typeLookup = {
   Answer: AnswerListViewModel,
-  AppUser: AppUserListViewModel,
+  AuditLog: AuditLogListViewModel,
+  AuditLogProperty: AuditLogPropertyListViewModel,
   Question: QuestionListViewModel,
 }
 const serviceViewModelTypeLookup = ServiceViewModel.typeLookup = {

@@ -1,9 +1,10 @@
 <template>
   <v-container>
     <h1>Random Question</h1>
-    <QuestionCard
+    <PublicQuestionCard
       v-if="randomQuestion !== null"
       :question="randomQuestion"
+      :questionService="questionService"
       class="mb-2"
     />
 
@@ -51,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+import PublicQuestionCard from "@/components/PublicQuestionCard.vue";
 import { Category as CategoryMetadata } from "@/metadata.g";
 import { Question } from "@/models.g";
 import {

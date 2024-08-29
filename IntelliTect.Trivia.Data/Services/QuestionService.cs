@@ -1,18 +1,25 @@
-﻿using IntelliTect.Trivia.Data.Models;
+﻿using IntelliTect.Trivia.Data.Dtos;
 
 namespace IntelliTect.Trivia.Data.Services;
 
 public class QuestionService(AppDbContext db) : IQuestionService
 {
-    public Question GetRandomQuestion()
+    public PublicQuestionDto GetRandomQuestion()
     {
         var randomIndex = new Random().Next(0, db.Questions.Count());
 
         return db.Questions
             .Include(x => x.Answers)
-            .Include(x => x.CorrectAnswer)
             .AsSingleQuery()
             .Skip(randomIndex).Take(1)
+            .Select(question => new PublicQuestionDto(question))
             .First();
+    }
+
+    public bool GuessAnswer(string answerId)
+    {
+        return db.Questions
+            .Where(x => x.CorrectAnswerId == answerId)
+            .Any();
     }
 }
