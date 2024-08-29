@@ -28,6 +28,39 @@ export class AnswerListViewModel extends ListViewModel<$models.Answer, $apiClien
 }
 
 
+export interface AppUserViewModel extends $models.AppUser {
+  id: string | null;
+  userName: string | null;
+  normalizedUserName: string | null;
+  email: string | null;
+  normalizedEmail: string | null;
+  emailConfirmed: boolean | null;
+  passwordHash: string | null;
+  securityStamp: string | null;
+  concurrencyStamp: string | null;
+  phoneNumber: string | null;
+  phoneNumberConfirmed: boolean | null;
+  twoFactorEnabled: boolean | null;
+  lockoutEnd: Date | null;
+  lockoutEnabled: boolean | null;
+  accessFailedCount: number | null;
+}
+export class AppUserViewModel extends ViewModel<$models.AppUser, $apiClients.AppUserApiClient, string> implements $models.AppUser  {
+  
+  constructor(initialData?: DeepPartial<$models.AppUser> | null) {
+    super($metadata.AppUser, new $apiClients.AppUserApiClient(), initialData)
+  }
+}
+defineProps(AppUserViewModel, $metadata.AppUser)
+
+export class AppUserListViewModel extends ListViewModel<$models.AppUser, $apiClients.AppUserApiClient, AppUserViewModel> {
+  
+  constructor() {
+    super($metadata.AppUser, new $apiClients.AppUserApiClient())
+  }
+}
+
+
 export interface AuditLogViewModel extends $models.AuditLog {
   id: number | null;
   type: string | null;
@@ -152,12 +185,14 @@ export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.
 
 const viewModelTypeLookup = ViewModel.typeLookup = {
   Answer: AnswerViewModel,
+  AppUser: AppUserViewModel,
   AuditLog: AuditLogViewModel,
   AuditLogProperty: AuditLogPropertyViewModel,
   Question: QuestionViewModel,
 }
 const listViewModelTypeLookup = ListViewModel.typeLookup = {
   Answer: AnswerListViewModel,
+  AppUser: AppUserListViewModel,
   AuditLog: AuditLogListViewModel,
   AuditLogProperty: AuditLogPropertyListViewModel,
   Question: QuestionListViewModel,

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IntelliTect.Trivia.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240829124218_Identity")]
+    [Migration("20240829152212_Identity")]
     partial class Identity
     {
         /// <inheritdoc />
@@ -24,6 +24,41 @@ namespace IntelliTect.Trivia.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("IntelliTect.Coalesce.AuditLogging.AuditLogProperty", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("NewValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewValueDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldValueDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ParentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PropertyName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("AuditLogProperties");
+                });
 
             modelBuilder.Entity("IntelliTect.Trivia.Data.Models.Answer", b =>
                 {
@@ -109,6 +144,51 @@ namespace IntelliTect.Trivia.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("IntelliTect.Trivia.Data.Models.AuditLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ClientIp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("Date")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Endpoint")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("KeyValue")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Referrer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("State")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("State");
+
+                    b.HasIndex("Type");
+
+                    b.HasIndex("Type", "KeyValue");
+
+                    b.ToTable("AuditLogs");
                 });
 
             modelBuilder.Entity("IntelliTect.Trivia.Data.Models.Question", b =>
@@ -267,6 +347,15 @@ namespace IntelliTect.Trivia.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("IntelliTect.Coalesce.AuditLogging.AuditLogProperty", b =>
+                {
+                    b.HasOne("IntelliTect.Trivia.Data.Models.AuditLog", null)
+                        .WithMany("Properties")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("IntelliTect.Trivia.Data.Models.Answer", b =>
                 {
                     b.HasOne("IntelliTect.Trivia.Data.Models.Question", "Question")
@@ -337,6 +426,11 @@ namespace IntelliTect.Trivia.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("IntelliTect.Trivia.Data.Models.AuditLog", b =>
+                {
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("IntelliTect.Trivia.Data.Models.Question", b =>

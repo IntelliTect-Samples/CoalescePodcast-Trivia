@@ -33,7 +33,7 @@ namespace IntelliTect.Trivia.Web.Api
         }
 
         [HttpGet("get/{id}")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ItemResult<AppUserResponse>> Get(
             string id,
             DataSourceParameters parameters,
@@ -41,14 +41,14 @@ namespace IntelliTect.Trivia.Web.Api
             => GetImplementation(id, parameters, dataSource);
 
         [HttpGet("list")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ListResult<AppUserResponse>> List(
             ListParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.AppUser> dataSource)
             => ListImplementation(parameters, dataSource);
 
         [HttpGet("count")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ItemResult<int>> Count(
             FilterParameters parameters,
             IDataSource<IntelliTect.Trivia.Data.Models.AppUser> dataSource)
@@ -64,7 +64,7 @@ namespace IntelliTect.Trivia.Web.Api
             => SaveImplementation(dto, parameters, dataSource, behaviors);
 
         [HttpPost("bulkSave")]
-        [Authorize]
+        [AllowAnonymous]
         public virtual Task<ItemResult<AppUserResponse>> BulkSave(
             [FromBody] BulkSaveRequest dto,
             [FromQuery] DataSourceParameters parameters,
@@ -72,13 +72,5 @@ namespace IntelliTect.Trivia.Web.Api
             [FromServices] IDataSourceFactory dataSourceFactory,
             [FromServices] IBehaviorsFactory behaviorsFactory)
             => BulkSaveImplementation(dto, parameters, dataSource, dataSourceFactory, behaviorsFactory);
-
-        [HttpPost("delete/{id}")]
-        [Authorize]
-        public virtual Task<ItemResult<AppUserResponse>> Delete(
-            string id,
-            IBehaviors<IntelliTect.Trivia.Data.Models.AppUser> behaviors,
-            IDataSource<IntelliTect.Trivia.Data.Models.AppUser> dataSource)
-            => DeleteImplementation(id, new DataSourceParameters(), dataSource, behaviors);
     }
 }
