@@ -52,6 +52,44 @@ export namespace Answer {
 }
 
 
+export interface AppUser extends Model<typeof metadata.AppUser> {
+  id: string | null
+  userName: string | null
+  normalizedUserName: string | null
+  email: string | null
+  normalizedEmail: string | null
+  emailConfirmed: boolean | null
+  passwordHash: string | null
+  securityStamp: string | null
+  concurrencyStamp: string | null
+  phoneNumber: string | null
+  phoneNumberConfirmed: boolean | null
+  twoFactorEnabled: boolean | null
+  lockoutEnd: Date | null
+  lockoutEnabled: boolean | null
+  accessFailedCount: number | null
+}
+export class AppUser {
+  
+  /** Mutates the input object and its descendents into a valid AppUser implementation. */
+  static convert(data?: Partial<AppUser>): AppUser {
+    return convertToModel(data || {}, metadata.AppUser) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid AppUser implementation. */
+  static map(data?: Partial<AppUser>): AppUser {
+    return mapToModel(data || {}, metadata.AppUser) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.AppUser; }
+  
+  /** Instantiate a new AppUser, optionally basing it on the given data. */
+  constructor(data?: Partial<AppUser> | {[k: string]: any}) {
+    Object.assign(this, AppUser.map(data || {}));
+  }
+}
+
+
 export interface Question extends Model<typeof metadata.Question> {
   questionId: string | null
   text: string | null

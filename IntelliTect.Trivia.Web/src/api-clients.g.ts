@@ -7,6 +7,11 @@ export class AnswerApiClient extends ModelApiClient<$models.Answer> {
 }
 
 
+export class AppUserApiClient extends ModelApiClient<$models.AppUser> {
+  constructor() { super($metadata.AppUser) }
+}
+
+
 export class QuestionApiClient extends ModelApiClient<$models.Question> {
   constructor() { super($metadata.Question) }
 }

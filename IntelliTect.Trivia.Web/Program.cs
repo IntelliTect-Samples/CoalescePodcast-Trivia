@@ -11,6 +11,13 @@ using System.Text.RegularExpressions;
 using IntelliTect.Trivia.Data;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using IntelliTect.Trivia.Data.Services;
+using IntelliTect.Trivia.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using IntelliTect.Trivia.Web.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -53,8 +60,58 @@ services
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
-services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-        .AddCookie();
+services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>(); // Tell identity where to sstore things
+
+JwtConfiguration jwtConfig = builder.Configuration
+    .GetSection("Jwt").Get<JwtConfiguration>() ?? throw new InvalidOperationException("JWT config not specified");
+builder.Services.AddSingleton(jwtConfig);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtConfig.Issuer,
+            ValidAudience = jwtConfig.Audience,
+
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtConfig.Secret))
+        }
+    );
+
+builder.Services.AddSwaggerGen(config =>
+{
+    config.SwaggerDoc("v1", new OpenApiInfo { Title = "Trivia API", Version = "v1" });
+    config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer"
+    });
+    config.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new List<string>()
+        }
+    });
+}
+);
+
+
 
 #endregion
 
@@ -72,19 +129,21 @@ if (app.Environment.IsDevelopment())
     });
 
     app.MapCoalesceSecurityOverview("coalesce-security");
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     // TODO: Dummy authentication for initial development.
     // Replace this with ASP.NET Core Identity, Windows Authentication, or some other scheme.
     // This exists only because Coalesce restricts all generated pages and API to only logged in users by default.
-    app.Use(async (context, next) =>
-    {
-        Claim[] claims = [new Claim(ClaimTypes.Name, "developmentuser")];
+    //app.Use(async (context, next) =>
+    //{
+    //    Claim[] claims = [new Claim(ClaimTypes.Name, "developmentuser")];
 
-        var identity = new ClaimsIdentity(claims, "dummy-auth");
-        context.User = new ClaimsPrincipal(identity);
+    //    var identity = new ClaimsIdentity(claims, "dummy-auth");
+    //    context.User = new ClaimsPrincipal(identity);
 
-        await next.Invoke();
-    });
+    //    await next.Invoke();
+    //});
     // End Dummy Authentication.
 }
 
@@ -133,6 +192,10 @@ using (var scope = app.Services.CreateScope())
     using var db = serviceScope.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
     await Seeder.Seed(db);
+    await IdentitySeed.SeedAsync(
+    scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>(),
+    scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>(),
+    db);
 }
 
 app.Run();
