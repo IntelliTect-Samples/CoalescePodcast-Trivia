@@ -1,10 +1,17 @@
+using IntelliTect.Coalesce.AuditLogging;
 using IntelliTect.Trivia.Data.Models;
+using IntelliTect.Trivia.Data.Services;
 
 namespace IntelliTect.Trivia.Data;
 
 [Coalesce]
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IAuditLogDbContext<AuditLog>
 {
+    // Audit Log Models
+    public DbSet<AuditLog> AuditLogs { get; set; }
+    public DbSet<AuditLogProperty> AuditLogProperties { get; set; }
+
+    // Models
     public DbSet<Question> Questions => Set<Question>();
     public DbSet<Answer> Answers => Set<Answer>();
 
@@ -21,5 +28,10 @@ public class AppDbContext : DbContext
         {
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseCoalesceAuditLogging<AuditLog>(x => x.WithAugmentation<OperationContext>());
     }
 }

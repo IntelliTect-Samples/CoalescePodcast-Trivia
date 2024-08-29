@@ -7,6 +7,28 @@ import {
 
 
 const domain: Domain = { enums: {}, types: {}, services: {} }
+export const AuditEntryState = domain.enums.AuditEntryState = {
+  name: "AuditEntryState",
+  displayName: "Audit Entry State",
+  type: "enum",
+  ...getEnumMeta<"EntityAdded"|"EntityDeleted"|"EntityModified">([
+  {
+    value: 0,
+    strValue: "EntityAdded",
+    displayName: "Entity Added",
+  },
+  {
+    value: 1,
+    strValue: "EntityDeleted",
+    displayName: "Entity Deleted",
+  },
+  {
+    value: 2,
+    strValue: "EntityModified",
+    displayName: "Entity Modified",
+  },
+  ]),
+}
 export const Category = domain.enums.Category = {
   name: "Category",
   displayName: "Category",
@@ -111,6 +133,164 @@ export const Answer = domain.types.Answer = {
         },
       },
     },
+  },
+}
+export const AuditLog = domain.types.AuditLog = {
+  name: "AuditLog",
+  displayName: "Audit Log",
+  get displayProp() { return this.props.type }, 
+  type: "model",
+  controllerRoute: "AuditLog",
+  get keyProp() { return this.props.id }, 
+  behaviorFlags: 0 as BehaviorFlags,
+  props: {
+    id: {
+      name: "id",
+      displayName: "Id",
+      type: "number",
+      role: "primaryKey",
+      hidden: 3 as HiddenAreas,
+    },
+    type: {
+      name: "type",
+      displayName: "Type",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Type is required.",
+        maxLength: val => !val || val.length <= 100 || "Type may not be more than 100 characters.",
+      }
+    },
+    keyValue: {
+      name: "keyValue",
+      displayName: "Key Value",
+      type: "string",
+      role: "value",
+    },
+    description: {
+      name: "description",
+      displayName: "Description",
+      type: "string",
+      role: "value",
+    },
+    state: {
+      name: "state",
+      displayName: "Change Type",
+      type: "enum",
+      get typeDef() { return domain.enums.AuditEntryState },
+      role: "value",
+    },
+    date: {
+      name: "date",
+      displayName: "Date",
+      type: "date",
+      dateKind: "datetime",
+      role: "value",
+    },
+    properties: {
+      name: "properties",
+      displayName: "Properties",
+      type: "collection",
+      itemType: {
+        name: "$collectionItem",
+        displayName: "",
+        role: "value",
+        type: "model",
+        get typeDef() { return (domain.types.AuditLogProperty as ModelType) },
+      },
+      role: "collectionNavigation",
+      get foreignKey() { return (domain.types.AuditLogProperty as ModelType).props.parentId as ForeignKeyProperty },
+      dontSerialize: true,
+    },
+    clientIp: {
+      name: "clientIp",
+      displayName: "Client IP",
+      type: "string",
+      role: "value",
+    },
+    referrer: {
+      name: "referrer",
+      displayName: "Referrer",
+      type: "string",
+      role: "value",
+    },
+    endpoint: {
+      name: "endpoint",
+      displayName: "Endpoint",
+      type: "string",
+      role: "value",
+    },
+  },
+  methods: {
+  },
+  dataSources: {
+  },
+}
+export const AuditLogProperty = domain.types.AuditLogProperty = {
+  name: "AuditLogProperty",
+  displayName: "Audit Log Property",
+  get displayProp() { return this.props.propertyName }, 
+  type: "model",
+  controllerRoute: "AuditLogProperty",
+  get keyProp() { return this.props.id }, 
+  behaviorFlags: 0 as BehaviorFlags,
+  props: {
+    id: {
+      name: "id",
+      displayName: "Id",
+      type: "number",
+      role: "primaryKey",
+      hidden: 3 as HiddenAreas,
+    },
+    parentId: {
+      name: "parentId",
+      displayName: "Parent Id",
+      type: "number",
+      role: "foreignKey",
+      get principalKey() { return (domain.types.AuditLog as ModelType).props.id as PrimaryKeyProperty },
+      get principalType() { return (domain.types.AuditLog as ModelType) },
+      rules: {
+        required: val => val != null || "Parent Id is required.",
+      }
+    },
+    propertyName: {
+      name: "propertyName",
+      displayName: "Property Name",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Property Name is required.",
+        maxLength: val => !val || val.length <= 100 || "Property Name may not be more than 100 characters.",
+      }
+    },
+    oldValue: {
+      name: "oldValue",
+      displayName: "Old Value",
+      type: "string",
+      role: "value",
+    },
+    oldValueDescription: {
+      name: "oldValueDescription",
+      displayName: "Old Value Description",
+      type: "string",
+      role: "value",
+    },
+    newValue: {
+      name: "newValue",
+      displayName: "New Value",
+      type: "string",
+      role: "value",
+    },
+    newValueDescription: {
+      name: "newValueDescription",
+      displayName: "New Value Description",
+      type: "string",
+      role: "value",
+    },
+  },
+  methods: {
+  },
+  dataSources: {
   },
 }
 export const Question = domain.types.Question = {
@@ -313,10 +493,13 @@ export const QuestionService = domain.services.QuestionService = {
 
 interface AppDomain extends Domain {
   enums: {
+    AuditEntryState: typeof AuditEntryState
     Category: typeof Category
   }
   types: {
     Answer: typeof Answer
+    AuditLog: typeof AuditLog
+    AuditLogProperty: typeof AuditLogProperty
     PublicAnswerDto: typeof PublicAnswerDto
     PublicQuestionDto: typeof PublicQuestionDto
     Question: typeof Question

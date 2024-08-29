@@ -1,6 +1,13 @@
 import * as metadata from './metadata.g'
 import { Model, DataSource, convertToModel, mapToModel, reactiveDataSource } from 'coalesce-vue/lib/model'
 
+export enum AuditEntryState {
+  EntityAdded = 0,
+  EntityDeleted = 1,
+  EntityModified = 2,
+}
+
+
 export enum Category {
   General = 0,
   Science = 1,
@@ -48,6 +55,69 @@ export namespace Answer {
         return reactiveDataSource(this);
       }
     }
+  }
+}
+
+
+export interface AuditLog extends Model<typeof metadata.AuditLog> {
+  id: number | null
+  type: string | null
+  keyValue: string | null
+  description: string | null
+  state: AuditEntryState | null
+  date: Date | null
+  properties: AuditLogProperty[] | null
+  clientIp: string | null
+  referrer: string | null
+  endpoint: string | null
+}
+export class AuditLog {
+  
+  /** Mutates the input object and its descendents into a valid AuditLog implementation. */
+  static convert(data?: Partial<AuditLog>): AuditLog {
+    return convertToModel(data || {}, metadata.AuditLog) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid AuditLog implementation. */
+  static map(data?: Partial<AuditLog>): AuditLog {
+    return mapToModel(data || {}, metadata.AuditLog) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.AuditLog; }
+  
+  /** Instantiate a new AuditLog, optionally basing it on the given data. */
+  constructor(data?: Partial<AuditLog> | {[k: string]: any}) {
+    Object.assign(this, AuditLog.map(data || {}));
+  }
+}
+
+
+export interface AuditLogProperty extends Model<typeof metadata.AuditLogProperty> {
+  id: number | null
+  parentId: number | null
+  propertyName: string | null
+  oldValue: string | null
+  oldValueDescription: string | null
+  newValue: string | null
+  newValueDescription: string | null
+}
+export class AuditLogProperty {
+  
+  /** Mutates the input object and its descendents into a valid AuditLogProperty implementation. */
+  static convert(data?: Partial<AuditLogProperty>): AuditLogProperty {
+    return convertToModel(data || {}, metadata.AuditLogProperty) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid AuditLogProperty implementation. */
+  static map(data?: Partial<AuditLogProperty>): AuditLogProperty {
+    return mapToModel(data || {}, metadata.AuditLogProperty) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.AuditLogProperty; }
+  
+  /** Instantiate a new AuditLogProperty, optionally basing it on the given data. */
+  constructor(data?: Partial<AuditLogProperty> | {[k: string]: any}) {
+    Object.assign(this, AuditLogProperty.map(data || {}));
   }
 }
 

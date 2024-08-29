@@ -17,6 +17,11 @@
           title="Questions"
         />
         <v-list-item
+          to="/admin/audit-logs"
+          prepend-icon="fas fa-book"
+          title="Audit Logs"
+        />
+        <v-list-item
           to="/admin"
           prepend-icon="fas fa-cogs"
           title="Admin Pages"

@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { CAdminEditorPage, CAdminTablePage } from "coalesce-vue-vuetify3";
+import { CAdminEditorPage, CAdminTablePage, CAdminAuditLogPage } from "coalesce-vue-vuetify3";
 
 export default createRouter({
   history: createWebHistory(),
@@ -24,6 +24,13 @@ export default createRouter({
       path: "/admin",
       name: "admin",
       component: () => import("./views/Admin.vue"),
+    },
+
+    // Audit Logs
+    {
+      path: '/admin/audit-logs',
+      component: CAdminAuditLogPage,
+      props: { type: 'AuditLog' }
     },
 
     // Coalesce admin routes

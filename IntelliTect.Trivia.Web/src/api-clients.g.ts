@@ -7,6 +7,16 @@ export class AnswerApiClient extends ModelApiClient<$models.Answer> {
 }
 
 
+export class AuditLogApiClient extends ModelApiClient<$models.AuditLog> {
+  constructor() { super($metadata.AuditLog) }
+}
+
+
+export class AuditLogPropertyApiClient extends ModelApiClient<$models.AuditLogProperty> {
+  constructor() { super($metadata.AuditLogProperty) }
+}
+
+
 export class QuestionApiClient extends ModelApiClient<$models.Question> {
   constructor() { super($metadata.Question) }
 }

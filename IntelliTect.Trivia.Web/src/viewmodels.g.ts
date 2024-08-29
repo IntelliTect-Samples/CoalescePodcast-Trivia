@@ -28,6 +28,65 @@ export class AnswerListViewModel extends ListViewModel<$models.Answer, $apiClien
 }
 
 
+export interface AuditLogViewModel extends $models.AuditLog {
+  id: number | null;
+  type: string | null;
+  keyValue: string | null;
+  description: string | null;
+  state: $models.AuditEntryState | null;
+  date: Date | null;
+  get properties(): ViewModelCollection<AuditLogPropertyViewModel, $models.AuditLogProperty>;
+  set properties(value: (AuditLogPropertyViewModel | $models.AuditLogProperty)[] | null);
+  clientIp: string | null;
+  referrer: string | null;
+  endpoint: string | null;
+}
+export class AuditLogViewModel extends ViewModel<$models.AuditLog, $apiClients.AuditLogApiClient, number> implements $models.AuditLog  {
+  
+  
+  public addToProperties(initialData?: DeepPartial<$models.AuditLogProperty> | null) {
+    return this.$addChild('properties', initialData) as AuditLogPropertyViewModel
+  }
+  
+  constructor(initialData?: DeepPartial<$models.AuditLog> | null) {
+    super($metadata.AuditLog, new $apiClients.AuditLogApiClient(), initialData)
+  }
+}
+defineProps(AuditLogViewModel, $metadata.AuditLog)
+
+export class AuditLogListViewModel extends ListViewModel<$models.AuditLog, $apiClients.AuditLogApiClient, AuditLogViewModel> {
+  
+  constructor() {
+    super($metadata.AuditLog, new $apiClients.AuditLogApiClient())
+  }
+}
+
+
+export interface AuditLogPropertyViewModel extends $models.AuditLogProperty {
+  id: number | null;
+  parentId: number | null;
+  propertyName: string | null;
+  oldValue: string | null;
+  oldValueDescription: string | null;
+  newValue: string | null;
+  newValueDescription: string | null;
+}
+export class AuditLogPropertyViewModel extends ViewModel<$models.AuditLogProperty, $apiClients.AuditLogPropertyApiClient, number> implements $models.AuditLogProperty  {
+  
+  constructor(initialData?: DeepPartial<$models.AuditLogProperty> | null) {
+    super($metadata.AuditLogProperty, new $apiClients.AuditLogPropertyApiClient(), initialData)
+  }
+}
+defineProps(AuditLogPropertyViewModel, $metadata.AuditLogProperty)
+
+export class AuditLogPropertyListViewModel extends ListViewModel<$models.AuditLogProperty, $apiClients.AuditLogPropertyApiClient, AuditLogPropertyViewModel> {
+  
+  constructor() {
+    super($metadata.AuditLogProperty, new $apiClients.AuditLogPropertyApiClient())
+  }
+}
+
+
 export interface QuestionViewModel extends $models.Question {
   questionId: string | null;
   text: string | null;
@@ -93,10 +152,14 @@ export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.
 
 const viewModelTypeLookup = ViewModel.typeLookup = {
   Answer: AnswerViewModel,
+  AuditLog: AuditLogViewModel,
+  AuditLogProperty: AuditLogPropertyViewModel,
   Question: QuestionViewModel,
 }
 const listViewModelTypeLookup = ListViewModel.typeLookup = {
   Answer: AnswerListViewModel,
+  AuditLog: AuditLogListViewModel,
+  AuditLogProperty: AuditLogPropertyListViewModel,
   Question: QuestionListViewModel,
 }
 const serviceViewModelTypeLookup = ServiceViewModel.typeLookup = {
