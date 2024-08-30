@@ -85,6 +85,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddSwaggerGen(config =>
 {
+    config.AddCoalesce();
     config.SwaggerDoc("v1", new OpenApiInfo { Title = "Trivia API", Version = "v1" });
     config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -108,8 +109,7 @@ builder.Services.AddSwaggerGen(config =>
             new List<string>()
         }
     });
-}
-);
+});
 
 
 
