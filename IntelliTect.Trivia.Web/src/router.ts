@@ -10,6 +10,11 @@ export default createRouter({
       component: () => import("./views/Home.vue"),
     },
     {
+      path: "/question-summary",
+      name: "question-summary",
+      component: () => import("./views/QuestionSummary.vue"),
+    },
+    {
       path: "/questions",
       name: "questions",
       component: () => import("./views/Questions.vue"),

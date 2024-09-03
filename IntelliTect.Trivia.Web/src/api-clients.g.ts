@@ -22,6 +22,11 @@ export class QuestionApiClient extends ModelApiClient<$models.Question> {
 }
 
 
+export class QuestionSummaryApiClient extends ModelApiClient<$models.QuestionSummary> {
+  constructor() { super($metadata.QuestionSummary) }
+}
+
+
 export class QuestionServiceApiClient extends ServiceApiClient<typeof $metadata.QuestionService> {
   constructor() { super($metadata.QuestionService) }
   public getRandomQuestion($config?: AxiosRequestConfig): AxiosPromise<ItemResult<$models.PublicQuestionDto>> {

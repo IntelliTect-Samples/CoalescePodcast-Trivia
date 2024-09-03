@@ -12,6 +12,11 @@
       <v-list>
         <v-list-item to="/" prepend-icon="fas fa-home" title="Home" />
         <v-list-item
+          to="/question-summary"
+          prepend-icon="fas fa-question-circle"
+          title="Question Summary"
+        />
+        <v-list-item
           to="/questions"
           prepend-icon="fas fa-palette"
           title="Questions"

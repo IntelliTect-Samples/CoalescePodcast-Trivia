@@ -381,6 +381,72 @@ export const Question = domain.types.Question = {
     },
   },
 }
+export const QuestionSummary = domain.types.QuestionSummary = {
+  name: "QuestionSummary",
+  displayName: "Question Summary",
+  get displayProp() { return this.props.id }, 
+  type: "model",
+  controllerRoute: "QuestionSummary",
+  get keyProp() { return this.props.id }, 
+  behaviorFlags: 0 as BehaviorFlags,
+  props: {
+    id: {
+      name: "id",
+      displayName: "Id",
+      type: "string",
+      role: "primaryKey",
+      hidden: 3 as HiddenAreas,
+    },
+    text: {
+      name: "text",
+      displayName: "Text",
+      type: "string",
+      role: "value",
+      rules: {
+        required: val => (val != null && val !== '') || "Text is required.",
+      }
+    },
+    answerCount: {
+      name: "answerCount",
+      displayName: "Answer Count",
+      type: "number",
+      role: "value",
+      rules: {
+        required: val => val != null || "Answer Count is required.",
+      }
+    },
+    hasCorrectAnswer: {
+      name: "hasCorrectAnswer",
+      displayName: "Has Correct Answer",
+      type: "boolean",
+      role: "value",
+      rules: {
+        required: val => val != null || "Has Correct Answer is required.",
+      }
+    },
+    category: {
+      name: "category",
+      displayName: "Category",
+      type: "enum",
+      get typeDef() { return domain.enums.Category },
+      role: "value",
+      rules: {
+        required: val => val != null || "Category is required.",
+      }
+    },
+  },
+  methods: {
+  },
+  dataSources: {
+    questionSummaryDataSource: {
+      type: "dataSource",
+      name: "QuestionSummaryDataSource",
+      displayName: "Question Summary Data Source",
+      props: {
+      },
+    },
+  },
+}
 export const PublicAnswerDto = domain.types.PublicAnswerDto = {
   name: "PublicAnswerDto",
   displayName: "Public Answer Dto",
@@ -503,6 +569,7 @@ interface AppDomain extends Domain {
     PublicAnswerDto: typeof PublicAnswerDto
     PublicQuestionDto: typeof PublicQuestionDto
     Question: typeof Question
+    QuestionSummary: typeof QuestionSummary
   }
   services: {
     QuestionService: typeof QuestionService

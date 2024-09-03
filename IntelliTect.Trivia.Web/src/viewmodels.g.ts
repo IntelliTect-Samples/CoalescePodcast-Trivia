@@ -120,6 +120,31 @@ export class QuestionListViewModel extends ListViewModel<$models.Question, $apiC
 }
 
 
+export interface QuestionSummaryViewModel extends $models.QuestionSummary {
+  id: string | null;
+  text: string | null;
+  answerCount: number | null;
+  hasCorrectAnswer: boolean | null;
+  category: $models.Category | null;
+}
+export class QuestionSummaryViewModel extends ViewModel<$models.QuestionSummary, $apiClients.QuestionSummaryApiClient, string> implements $models.QuestionSummary  {
+  static DataSources = $models.QuestionSummary.DataSources;
+  
+  constructor(initialData?: DeepPartial<$models.QuestionSummary> | null) {
+    super($metadata.QuestionSummary, new $apiClients.QuestionSummaryApiClient(), initialData)
+  }
+}
+defineProps(QuestionSummaryViewModel, $metadata.QuestionSummary)
+
+export class QuestionSummaryListViewModel extends ListViewModel<$models.QuestionSummary, $apiClients.QuestionSummaryApiClient, QuestionSummaryViewModel> {
+  static DataSources = $models.QuestionSummary.DataSources;
+  
+  constructor() {
+    super($metadata.QuestionSummary, new $apiClients.QuestionSummaryApiClient())
+  }
+}
+
+
 export class QuestionServiceViewModel extends ServiceViewModel<typeof $metadata.QuestionService, $apiClients.QuestionServiceApiClient> {
   
   public get getRandomQuestion() {
@@ -155,12 +180,14 @@ const viewModelTypeLookup = ViewModel.typeLookup = {
   AuditLog: AuditLogViewModel,
   AuditLogProperty: AuditLogPropertyViewModel,
   Question: QuestionViewModel,
+  QuestionSummary: QuestionSummaryViewModel,
 }
 const listViewModelTypeLookup = ListViewModel.typeLookup = {
   Answer: AnswerListViewModel,
   AuditLog: AuditLogListViewModel,
   AuditLogProperty: AuditLogPropertyListViewModel,
   Question: QuestionListViewModel,
+  QuestionSummary: QuestionSummaryListViewModel,
 }
 const serviceViewModelTypeLookup = ServiceViewModel.typeLookup = {
   QuestionService: QuestionServiceViewModel,

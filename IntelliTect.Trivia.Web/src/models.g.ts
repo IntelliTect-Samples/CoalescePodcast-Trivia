@@ -216,3 +216,39 @@ export class PublicQuestionDto {
 }
 
 
+export interface QuestionSummary extends Model<typeof metadata.QuestionSummary> {
+  id: string | null
+  text: string | null
+  answerCount: number | null
+  hasCorrectAnswer: boolean | null
+  category: Category | null
+}
+export class QuestionSummary {
+  
+  /** Mutates the input object and its descendents into a valid QuestionSummary implementation. */
+  static convert(data?: Partial<QuestionSummary>): QuestionSummary {
+    return convertToModel(data || {}, metadata.QuestionSummary) 
+  }
+  
+  /** Maps the input object and its descendents to a new, valid QuestionSummary implementation. */
+  static map(data?: Partial<QuestionSummary>): QuestionSummary {
+    return mapToModel(data || {}, metadata.QuestionSummary) 
+  }
+  
+  static [Symbol.hasInstance](x: any) { return x?.$metadata === metadata.QuestionSummary; }
+  
+  /** Instantiate a new QuestionSummary, optionally basing it on the given data. */
+  constructor(data?: Partial<QuestionSummary> | {[k: string]: any}) {
+    Object.assign(this, QuestionSummary.map(data || {}));
+  }
+}
+export namespace QuestionSummary {
+  export namespace DataSources {
+    
+    export class QuestionSummaryDataSource implements DataSource<typeof metadata.QuestionSummary.dataSources.questionSummaryDataSource> {
+      readonly $metadata = metadata.QuestionSummary.dataSources.questionSummaryDataSource
+    }
+  }
+}
+
+
