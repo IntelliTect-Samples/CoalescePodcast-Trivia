@@ -1,11 +1,12 @@
 using IntelliTect.Coalesce.AuditLogging;
 using IntelliTect.Trivia.Data.Models;
 using IntelliTect.Trivia.Data.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IntelliTect.Trivia.Data;
 
 [Coalesce]
-public class AppDbContext : DbContext, IAuditLogDbContext<AuditLog>
+public class AppDbContext : IdentityDbContext<AppUser>, IAuditLogDbContext<AuditLog>
 {
     // Audit Log Models
     public DbSet<AuditLog> AuditLogs { get; set; }
