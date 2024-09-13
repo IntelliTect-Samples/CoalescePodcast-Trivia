@@ -1,11 +1,12 @@
 <template>
   <div>
     <h1>Question Summary</h1>
+    {{ selectedIds }}
     <c-loader-status :loaders="questionSummaries.$load" />
     <v-table>
       <thead>
         <tr>
-          <th>Question Id</th>
+          <th></th>
           <th>Text</th>
           <th>Has Correct Answer</th>
           <th>Answer Count</th>
@@ -13,16 +14,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr
+        <QuestionSummaryRow
           v-for="questionSummary in questionSummaries.$items"
           :key="questionSummary.$stableId"
-        >
-          <td>{{ questionSummary.id }}</td>
-          <td>{{ questionSummary.text }}</td>
-          <td>{{ questionSummary.hasCorrectAnswer }}</td>
-          <td>{{ questionSummary.answerCount }}</td>
-          <td>{{ Category[questionSummary.category ?? 0] }}</td>
-        </tr>
+          :questionSummary="questionSummary"
+          @selectionChanged="selectionChanged"
+        />
       </tbody>
     </v-table>
     <c-list-pagination :list="questionSummaries" />
@@ -31,9 +28,18 @@
 
 <script setup lang="ts">
 import { QuestionSummaryListViewModel } from "@/viewmodels.g";
-import { Category } from "@/models.g";
+
+const selectedIds = ref<string[]>([]);
 
 const questionSummaries = new QuestionSummaryListViewModel();
 questionSummaries.$load();
 questionSummaries.$useAutoLoad();
+
+function selectionChanged(isSelected: boolean, id: string) {
+  if (isSelected) {
+    selectedIds.value.push(id);
+  } else {
+    selectedIds.value = selectedIds.value.filter((x) => x !== id);
+  }
+}
 </script>
