@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using IntelliTect.Trivia.Data;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using IntelliTect.Trivia.Data.Services;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -56,6 +57,13 @@ services
 services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie();
 
+services.AddSwaggerGen(config =>
+{
+    config.SwaggerDoc("v1", new OpenApiInfo { Title = "Trivia App API", Version = "v1" });
+
+    config.AddCoalesce();
+});
+
 #endregion
 
 #region Configure HTTP Pipeline
@@ -70,6 +78,9 @@ if (app.Environment.IsDevelopment())
     {
         c.DevServerPort = 33972;
     });
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.MapCoalesceSecurityOverview("coalesce-security");
 
