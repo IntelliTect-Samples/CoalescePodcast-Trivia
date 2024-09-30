@@ -252,3 +252,18 @@ export namespace QuestionSummary {
 }
 
 
+declare module "coalesce-vue/lib/model" {
+  interface EnumTypeLookup {
+    AuditEntryState: AuditEntryState
+    Category: Category
+  }
+  interface ModelTypeLookup {
+    Answer: Answer
+    AuditLog: AuditLog
+    AuditLogProperty: AuditLogProperty
+    PublicAnswerDto: PublicAnswerDto
+    PublicQuestionDto: PublicQuestionDto
+    Question: Question
+    QuestionSummary: QuestionSummary
+  }
+}

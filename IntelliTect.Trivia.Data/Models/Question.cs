@@ -12,9 +12,9 @@ public enum Category
 }
 
 [Read(SecurityPermissionLevels.AllowAll)]
-[Edit(SecurityPermissionLevels.AllowAuthorized)]
-[Create(SecurityPermissionLevels.AllowAuthorized)]
-[Delete(SecurityPermissionLevels.AllowAuthorized)]
+[Edit(SecurityPermissionLevels.AllowAuthenticated)]
+[Create(SecurityPermissionLevels.AllowAuthenticated)]
+[Delete(SecurityPermissionLevels.AllowAuthenticated)]
 public class Question
 {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

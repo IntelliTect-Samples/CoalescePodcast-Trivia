@@ -8,7 +8,7 @@ import {
 
 const domain: Domain = { enums: {}, types: {}, services: {} }
 export const AuditEntryState = domain.enums.AuditEntryState = {
-  name: "AuditEntryState",
+  name: "AuditEntryState" as const,
   displayName: "Audit Entry State",
   type: "enum",
   ...getEnumMeta<"EntityAdded"|"EntityDeleted"|"EntityModified">([
@@ -30,7 +30,7 @@ export const AuditEntryState = domain.enums.AuditEntryState = {
   ]),
 }
 export const Category = domain.enums.Category = {
-  name: "Category",
+  name: "Category" as const,
   displayName: "Category",
   type: "enum",
   ...getEnumMeta<"General"|"Science"|"History"|"Geography"|"Literature"|"Technology">([
@@ -67,7 +67,7 @@ export const Category = domain.enums.Category = {
   ]),
 }
 export const Answer = domain.types.Answer = {
-  name: "Answer",
+  name: "Answer" as const,
   displayName: "Answer",
   get displayProp() { return this.props.text }, 
   type: "model",
@@ -97,9 +97,9 @@ export const Answer = domain.types.Answer = {
       displayName: "Question Id",
       type: "string",
       role: "foreignKey",
-      get principalKey() { return (domain.types.Question as ModelType).props.questionId as PrimaryKeyProperty },
-      get principalType() { return (domain.types.Question as ModelType) },
-      get navigationProp() { return (domain.types.Answer as ModelType).props.question as ModelReferenceNavigationProperty },
+      get principalKey() { return (domain.types.Question as ModelType & { name: "Question" }).props.questionId as PrimaryKeyProperty },
+      get principalType() { return (domain.types.Question as ModelType & { name: "Question" }) },
+      get navigationProp() { return (domain.types.Answer as ModelType & { name: "Answer" }).props.question as ModelReferenceNavigationProperty },
       hidden: 3 as HiddenAreas,
       rules: {
         required: val => (val != null && val !== '') || "Question is required.",
@@ -109,11 +109,11 @@ export const Answer = domain.types.Answer = {
       name: "question",
       displayName: "Question",
       type: "model",
-      get typeDef() { return (domain.types.Question as ModelType) },
+      get typeDef() { return (domain.types.Question as ModelType & { name: "Question" }) },
       role: "referenceNavigation",
-      get foreignKey() { return (domain.types.Answer as ModelType).props.questionId as ForeignKeyProperty },
-      get principalKey() { return (domain.types.Question as ModelType).props.questionId as PrimaryKeyProperty },
-      get inverseNavigation() { return (domain.types.Question as ModelType).props.answers as ModelCollectionNavigationProperty },
+      get foreignKey() { return (domain.types.Answer as ModelType & { name: "Answer" }).props.questionId as ForeignKeyProperty },
+      get principalKey() { return (domain.types.Question as ModelType & { name: "Question" }).props.questionId as PrimaryKeyProperty },
+      get inverseNavigation() { return (domain.types.Question as ModelType & { name: "Question" }).props.answers as ModelCollectionNavigationProperty },
       dontSerialize: true,
     },
   },
@@ -122,7 +122,7 @@ export const Answer = domain.types.Answer = {
   dataSources: {
     answersForQuestionDataSource: {
       type: "dataSource",
-      name: "AnswersForQuestionDataSource",
+      name: "AnswersForQuestionDataSource" as const,
       displayName: "Answers For Question Data Source",
       props: {
         questionId: {
@@ -136,7 +136,7 @@ export const Answer = domain.types.Answer = {
   },
 }
 export const AuditLog = domain.types.AuditLog = {
-  name: "AuditLog",
+  name: "AuditLog" as const,
   displayName: "Audit Log",
   get displayProp() { return this.props.type }, 
   type: "model",
@@ -177,7 +177,7 @@ export const AuditLog = domain.types.AuditLog = {
       name: "state",
       displayName: "Change Type",
       type: "enum",
-      get typeDef() { return domain.enums.AuditEntryState },
+      get typeDef() { return AuditEntryState },
       role: "value",
     },
     date: {
@@ -196,10 +196,10 @@ export const AuditLog = domain.types.AuditLog = {
         displayName: "",
         role: "value",
         type: "model",
-        get typeDef() { return (domain.types.AuditLogProperty as ModelType) },
+        get typeDef() { return (domain.types.AuditLogProperty as ModelType & { name: "AuditLogProperty" }) },
       },
       role: "collectionNavigation",
-      get foreignKey() { return (domain.types.AuditLogProperty as ModelType).props.parentId as ForeignKeyProperty },
+      get foreignKey() { return (domain.types.AuditLogProperty as ModelType & { name: "AuditLogProperty" }).props.parentId as ForeignKeyProperty },
       dontSerialize: true,
     },
     clientIp: {
@@ -227,7 +227,7 @@ export const AuditLog = domain.types.AuditLog = {
   },
 }
 export const AuditLogProperty = domain.types.AuditLogProperty = {
-  name: "AuditLogProperty",
+  name: "AuditLogProperty" as const,
   displayName: "Audit Log Property",
   get displayProp() { return this.props.propertyName }, 
   type: "model",
@@ -247,8 +247,8 @@ export const AuditLogProperty = domain.types.AuditLogProperty = {
       displayName: "Parent Id",
       type: "number",
       role: "foreignKey",
-      get principalKey() { return (domain.types.AuditLog as ModelType).props.id as PrimaryKeyProperty },
-      get principalType() { return (domain.types.AuditLog as ModelType) },
+      get principalKey() { return (domain.types.AuditLog as ModelType & { name: "AuditLog" }).props.id as PrimaryKeyProperty },
+      get principalType() { return (domain.types.AuditLog as ModelType & { name: "AuditLog" }) },
       rules: {
         required: val => val != null || "Parent Id is required.",
       }
@@ -294,7 +294,7 @@ export const AuditLogProperty = domain.types.AuditLogProperty = {
   },
 }
 export const Question = domain.types.Question = {
-  name: "Question",
+  name: "Question" as const,
   displayName: "Question",
   get displayProp() { return this.props.text }, 
   type: "model",
@@ -323,7 +323,7 @@ export const Question = domain.types.Question = {
       name: "category",
       displayName: "Category",
       type: "enum",
-      get typeDef() { return domain.enums.Category },
+      get typeDef() { return Category },
       role: "value",
     },
     correctAnswerId: {
@@ -331,19 +331,19 @@ export const Question = domain.types.Question = {
       displayName: "Correct Answer Id",
       type: "string",
       role: "foreignKey",
-      get principalKey() { return (domain.types.Answer as ModelType).props.answerId as PrimaryKeyProperty },
-      get principalType() { return (domain.types.Answer as ModelType) },
-      get navigationProp() { return (domain.types.Question as ModelType).props.correctAnswer as ModelReferenceNavigationProperty },
+      get principalKey() { return (domain.types.Answer as ModelType & { name: "Answer" }).props.answerId as PrimaryKeyProperty },
+      get principalType() { return (domain.types.Answer as ModelType & { name: "Answer" }) },
+      get navigationProp() { return (domain.types.Question as ModelType & { name: "Question" }).props.correctAnswer as ModelReferenceNavigationProperty },
       hidden: 3 as HiddenAreas,
     },
     correctAnswer: {
       name: "correctAnswer",
       displayName: "Correct Answer",
       type: "model",
-      get typeDef() { return (domain.types.Answer as ModelType) },
+      get typeDef() { return (domain.types.Answer as ModelType & { name: "Answer" }) },
       role: "referenceNavigation",
-      get foreignKey() { return (domain.types.Question as ModelType).props.correctAnswerId as ForeignKeyProperty },
-      get principalKey() { return (domain.types.Answer as ModelType).props.answerId as PrimaryKeyProperty },
+      get foreignKey() { return (domain.types.Question as ModelType & { name: "Question" }).props.correctAnswerId as ForeignKeyProperty },
+      get principalKey() { return (domain.types.Answer as ModelType & { name: "Answer" }).props.answerId as PrimaryKeyProperty },
       dontSerialize: true,
     },
     answers: {
@@ -355,11 +355,11 @@ export const Question = domain.types.Question = {
         displayName: "",
         role: "value",
         type: "model",
-        get typeDef() { return (domain.types.Answer as ModelType) },
+        get typeDef() { return (domain.types.Answer as ModelType & { name: "Answer" }) },
       },
       role: "collectionNavigation",
-      get foreignKey() { return (domain.types.Answer as ModelType).props.questionId as ForeignKeyProperty },
-      get inverseNavigation() { return (domain.types.Answer as ModelType).props.question as ModelReferenceNavigationProperty },
+      get foreignKey() { return (domain.types.Answer as ModelType & { name: "Answer" }).props.questionId as ForeignKeyProperty },
+      get inverseNavigation() { return (domain.types.Answer as ModelType & { name: "Answer" }).props.question as ModelReferenceNavigationProperty },
       dontSerialize: true,
     },
   },
@@ -368,7 +368,7 @@ export const Question = domain.types.Question = {
   dataSources: {
     questionsDataSource: {
       type: "dataSource",
-      name: "QuestionsDataSource",
+      name: "QuestionsDataSource" as const,
       displayName: "Questions Data Source",
       props: {
         correctAnswerText: {
@@ -382,7 +382,7 @@ export const Question = domain.types.Question = {
   },
 }
 export const QuestionSummary = domain.types.QuestionSummary = {
-  name: "QuestionSummary",
+  name: "QuestionSummary" as const,
   displayName: "Question Summary",
   get displayProp() { return this.props.id }, 
   type: "model",
@@ -428,7 +428,7 @@ export const QuestionSummary = domain.types.QuestionSummary = {
       name: "category",
       displayName: "Category",
       type: "enum",
-      get typeDef() { return domain.enums.Category },
+      get typeDef() { return Category },
       role: "value",
       rules: {
         required: val => val != null || "Category is required.",
@@ -440,7 +440,7 @@ export const QuestionSummary = domain.types.QuestionSummary = {
   dataSources: {
     questionSummaryDataSource: {
       type: "dataSource",
-      name: "QuestionSummaryDataSource",
+      name: "QuestionSummaryDataSource" as const,
       displayName: "Question Summary Data Source",
       props: {
       },
@@ -448,7 +448,7 @@ export const QuestionSummary = domain.types.QuestionSummary = {
   },
 }
 export const PublicAnswerDto = domain.types.PublicAnswerDto = {
-  name: "PublicAnswerDto",
+  name: "PublicAnswerDto" as const,
   displayName: "Public Answer Dto",
   type: "object",
   props: {
@@ -473,7 +473,7 @@ export const PublicAnswerDto = domain.types.PublicAnswerDto = {
   },
 }
 export const PublicQuestionDto = domain.types.PublicQuestionDto = {
-  name: "PublicQuestionDto",
+  name: "PublicQuestionDto" as const,
   displayName: "Public Question Dto",
   type: "object",
   props: {
@@ -504,7 +504,7 @@ export const PublicQuestionDto = domain.types.PublicQuestionDto = {
         displayName: "",
         role: "value",
         type: "object",
-        get typeDef() { return (domain.types.PublicAnswerDto as ObjectType) },
+        get typeDef() { return (domain.types.PublicAnswerDto as ObjectType & { name: "PublicAnswerDto" }) },
       },
       role: "value",
     },
@@ -527,7 +527,7 @@ export const QuestionService = domain.services.QuestionService = {
         name: "$return",
         displayName: "Result",
         type: "object",
-        get typeDef() { return (domain.types.PublicQuestionDto as ObjectType) },
+        get typeDef() { return (domain.types.PublicQuestionDto as ObjectType & { name: "PublicQuestionDto" }) },
         role: "value",
       },
     },
